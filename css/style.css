@@ -1,0 +1,77 @@
+body {
+	color: black;
+	font: 14px/1.6 "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background: #FFFFFF;
+	min-width: 400px;
+	margin: 4em;
+}
+
+h1 {
+	font-size: 300%;
+	margin: 0;
+}
+
+h1 a, h1 a:hover {
+	text-decoration: none;
+	color: #000000;
+}
+
+h2 {
+	font-size: 150%;
+}
+
+a {
+	text-decoration: none;
+	color: #0000E5;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+#container {
+	max-width: 760px;
+	margin: 0 auto;
+}
+
+footer {
+	color: #fff;
+	position: fixed;
+	left: 0em;
+	bottom: 0em;
+	min-width: 400px;
+	width: 100%;
+	background: #333;
+	z-index: 2;
+}
+
+footer p {
+	padding: 0.5em 3em 0.5em 0;
+	margin: 0;
+    text-align: right;
+}
+
+#note { 
+	font-size: 1200%; 
+}
+
+#detector { 
+	width: 25em;
+	height: 25em;
+	border: 0.5em solid #808080;
+	border-radius: 2em;
+	text-align: center;
+	margin: 2em auto;
+}
+
+.pitch {
+	padding-top: 1.5em;
+}
+
+#flat, #sharp { 
+	display: none; 
+}
+
+.flat #flat, .sharp #sharp {
+	display: inline;
+}
