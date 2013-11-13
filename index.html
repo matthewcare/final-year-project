@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<meta name="author" content="Matthew Care">
 		<link rel="stylesheet" href="css/style.css">
-		<title>Note calculator</title>
+		<title>Sound analyser</title>
 	</head>
 	<body>
 		<div id="container">
@@ -12,16 +12,15 @@
 				<h1><a href="../index.html">matthewcare.co.uk</a></h1>
 			</header>
 			<div id="content">
-				<h2>Note detector and calculator</h2>
-				<p>Works out what note you are playing/singing/making based on your microphone input. Alternatively you can simply type in a frequency of a note. It seems to work best with whistling, unless you are a really good singer.</p>
-				<p>Tested on <a href="https://www.google.com/intl/en/chrome/browser/">Chrome</a> version 30+</p>
+				<h2>Sound analyser</h2>
+				<p>Analyses sound input via microphone or audio mixer, and tells you what note the sound makes. The analyser works best with whistling at the moment, but I am working on making it more accurate for use with musical instuments.</p>
+				<p>This project only works on <a href="https://www.google.com/intl/en/chrome/browser/">Chrome</a> version 28+</p>
+				<p>Chrome will ask for permission to use the microphone at the top of the screen once you turn live input on.</p>
+				<p>If it doesn't work click the camera button at the top right of the browser (in the address bar), and make sure that the correct microphone is selected.</p>
 
-				<input type="text" id="freq" placeholder="Type a frequency">
-				<input type="text" id="output" readonly>
-				<input type="button" value="Calculate" id="button">
-				<input type="button" value="Live Input Toggle" id="liveInputToggleBtn">
+				<input type="button" value="Live Input On" id="liveInputToggleBtn">
 				
-				<div>
+				<div id="detector">
 					<div class="pitch"><span id="pitch">--</span>Hz</div>
 					<div class="note"><span id="note">-</span></div>   
 					<div id="cent"><span id="centAmount">--</span><span id="flat"> cents &#9837;</span><span id="sharp"> cents &#9839;</span></div>
@@ -33,7 +32,6 @@
 			</footer>
 			
 		</div>
-		<script src="js/notes.js"></script>
 		<script src="js/stream.js"></script>
 		<script src="js/main.js"></script>
 	</body>

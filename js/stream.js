@@ -19,6 +19,7 @@ var stream = {
     centElement: null,
     centAmount: null,
     noteStrings: ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
+    avarageArray: [],
 
     startMedia: function () {
         this.pitchElement = document.getElementById('pitch');
@@ -156,10 +157,32 @@ var stream = {
             }
         }
 
+        this.averaging(frequency);
+
         if (!window.requestAnimationFrame) {
             window.requestAnimationFrame = window.webkitRequestAnimationFrame;
         }
         this.animationFrameId = window.requestAnimationFrame(this.updatePitch.bind(this));
+    },
+
+
+    averaging: function (frequency) {
+        var average = null,
+            sum = null;
+
+        if (this.avarageArray.length === 60) {
+            console.log(this.avarageArray);
+            sum = this.avarageArray.reduce(function (a, b) {
+                return a + b;
+            });
+            average = sum / this.avarageArray.length;
+            console.log(this.noteStrings[this.noteFromPitch(frequency) % 12]);
+            this.avarageArray.length = 0;
+        } else if (frequency === 0) {
+            this.avarageArray.length = 0;
+        } else {
+            this.avarageArray.push(frequency);
+        }
     },
 
     errorCb: function (err) {

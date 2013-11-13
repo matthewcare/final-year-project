@@ -51,6 +51,12 @@ footer p {
     text-align: right;
 }
 
+#liveInputToggleBtn {
+	padding: 1em;
+	display: block;
+	margin: 0 auto;
+}
+
 #note { 
 	font-size: 1200%; 
 }
@@ -61,7 +67,7 @@ footer p {
 	border: 0.5em solid #808080;
 	border-radius: 2em;
 	text-align: center;
-	margin: 2em auto;
+	margin: 1em auto;
 }
 
 .pitch {
