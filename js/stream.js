@@ -21,21 +21,28 @@ var stream = {
     animationFrameId: null,
     tracks: null,
     buffer: null,
-    detectorElement: null,
-    pitchElement: null,
-    noteElement: null,
-    centElement: null,
-    centAmount: null,
+    livePitchElement: null,
+    liveNoteElement: null,
+    liveCentElement: null,
+    liveCentAmount: null,
+    wholeSamplePitchElement: null,
+    wholeSampleNoteElement: null,
+    wholeSampleCentElement: null,
+    wholeSampleCentAmount: null,
     meanValue: null,
     medianValue: null,
     modeValue: null,
     frequencyArray: [],
 
     startMedia: function () {
-        this.pitchElement = document.getElementById('pitch');
-        this.noteElement = document.getElementById('note');
-        this.centElement = document.getElementById('cent');
-        this.centAmount = document.getElementById('centAmount');
+        this.livePitchElement = document.getElementById('livePitch');
+        this.liveNoteElement = document.getElementById('liveNote');
+        this.liveCentElement = document.getElementById('liveCent');
+        this.liveCentAmount = document.getElementById('liveCentAmount');
+        this.wholeSamplePitchElement = document.getElementById('wholeSamplePitch');
+        this.wholeSampleNoteElement = document.getElementById('wholeSampleNote');
+        this.wholeSampleCentElement = document.getElementById('wholeSampleCent');
+        this.wholeSampleCentAmount = document.getElementById('wholeSampleCentAmount');
         this.audioContext = new webkitAudioContext();
         this.buffer = new Uint8Array(this.BUFFERLENGTH);
         this.initUserMedia({audio: true}, this.gotStream.bind(this), errorLogger);
@@ -125,32 +132,20 @@ var stream = {
             i = 0,
             n = 0,
             sum = 0,
-            frequency = 0,
-            note = 0,
-            cent = 0;
+            frequency = 0;
 
         this.analyser.getByteTimeDomainData(this.buffer);
-        while (lastZero !== -1) {
+
+        for (n = 0; n < 1000; n++) {
+            if (lastZero === -1) {
+                break;
+            }
             nextZero = this.findNextPositiveZeroCrossing(lastZero + 1);
             if (nextZero > -1) {
                 cycles.push(nextZero - lastZero);
             }
             lastZero = nextZero;
-
-            n++;
-            if (n > 1000) {
-                break;
-            }
         }
-
-        // for (n = 0; n < 1000; n++) {
-        //     if (lastZero === -1) break;
-        //     nextZero = this.findNextPositiveZeroCrossing(lastZero + 1);
-        //     if (nextZero > -1) {
-        //         cycles.push(nextZero - lastZero);
-        //     }
-        //     lastZero = nextZero;
-        // }
 
         numberOfCycles = cycles.length;
 
@@ -163,29 +158,7 @@ var stream = {
             frequency = this.audioContext.sampleRate / sum;
         }
 
-        if (numberOfCycles === 0) {
-            this.pitchElement.innerText = "--";
-            this.noteElement.innerText = "-";
-            this.centElement.className = "";
-            this.centAmount.innerText = "--";
-        } else {
-            this.pitchElement.innerText = Math.floor(frequency);
-            note =  this.noteFromPitch(frequency);
-            cent = this.centsOffFromPitch(frequency, note);                                  // Split this part into its own function
-            this.noteElement.innerText = this.NOTESTRINGS[note % 12];
-            if (cent === 0) {
-                this.centElement.className = "";
-                this.centAmount.innerText = "--";
-            } else {
-                if (cent < 0) {
-                    this.centElement.className = "flat";
-                } else {
-                    this.centElement.className = "sharp";
-                }
-                this.centAmount.innerText = Math.abs(cent);
-            }
-        }
-
+        this.updateDisplay(numberOfCycles, frequency, 1);
         this.measuresOfCentralTendancy(frequency);
 
         // if (!window.requestAnimationFrame) {
@@ -196,6 +169,59 @@ var stream = {
         setTimeout(this.updatePitch.bind(this), 4);
 
     },
+
+    updateDisplay: function (numberOfCycles, frequency, id) {
+
+        var note = 0,
+            cent = 0;
+
+        if (id === 1) {
+            if (numberOfCycles === 0) {
+                this.livePitchElement.innerText = "--";
+                this.liveNoteElement.innerText = "-";
+                this.liveCentElement.className = "";
+                this.liveCentAmount.innerText = "--";
+            } else {
+                this.livePitchElement.innerText = Math.floor(frequency);
+                note =  this.noteFromPitch(frequency);
+                cent = this.centsOffFromPitch(frequency, note);
+                this.liveNoteElement.innerText = this.NOTESTRINGS[note % 12];
+
+                if (cent === 0) {
+                    this.liveCentElement.className = "";
+                    this.liveCentAmount.innerText = "--";
+                } else {
+                    if (cent < 0) {
+                        this.liveCentElement.className = "flat";
+                    } else {
+                        this.liveCentElement.className = "sharp";
+                    }
+                    this.liveCentAmount.innerText = Math.abs(cent) + ' ';
+                }
+            }
+        }
+
+        if (id === 2) {
+            this.wholeSamplePitchElement.innerText = Math.floor(frequency);
+            note =  this.noteFromPitch(frequency);
+            cent = this.centsOffFromPitch(frequency, note);
+            this.wholeSampleNoteElement.innerText = this.NOTESTRINGS[note % 12];
+
+            if (cent === 0) {
+                this.wholeSampleCentElement.className = "";
+                this.wholeSampleCentAmount.innerText = "--";
+            } else {
+                if (cent < 0) {
+                    this.wholeSampleCentElement.className = "flat";
+                } else {
+                    this.wholeSampleCentElement.className = "sharp";
+                }
+                this.wholeSampleCentAmount.innerText = Math.abs(cent) + ' ';
+            }
+        }
+
+    },
+
 
     mean: function (values) {
         var sumOfArray = null;
@@ -238,6 +264,7 @@ var stream = {
             // console.log('Mean: ' + this.meanValue + ' ' +  this.NOTESTRINGS[this.noteFromPitch(this.meanValue) % 12]);
             // console.log('Median: ' + this.medianValue + ' ' +  this.NOTESTRINGS[this.noteFromPitch(this.medianValue) % 12]);
             console.log('Mode: ' + this.modeValue + ' ' + this.NOTESTRINGS[this.noteFromPitch(this.modeValue) % 12] + '\n');
+            this.updateDisplay(null, this.modeValue, 2);
             this.frequencyArray.length = 0;
         } else if (frequency === 0 && this.frequencyArray.length > 0) {
             this.frequencyArray.length = 0;

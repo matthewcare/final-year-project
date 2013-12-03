@@ -57,17 +57,22 @@ footer p {
 	margin: 0 auto;
 }
 
-#note { 
-	font-size: 1200%; 
+#liveNote, #halfSecondNote, #wholeSampleNote { 
+	font-size: 900%; 
 }
 
-#detector { 
-	width: 25em;
-	height: 25em;
+#display { 
+	width: 60%;
+	height: 20em;
 	border: 0.5em solid #808080;
 	border-radius: 2em;
 	text-align: center;
 	margin: 1em auto;
+}
+
+#live, #halfSecond, #wholeSample {
+	display: inline-block;
+	width: 49%;
 }
 
 .pitch {
@@ -79,5 +84,5 @@ footer p {
 }
 
 .flat #flat, .sharp #sharp {
-	display: inline;
+	display: inline-block;
 }

@@ -18,13 +18,26 @@
 				<p>Chrome will ask for permission to use the microphone at the top of the screen once you turn live input on.</p>
 				<p>If it doesn't work click the camera button at the top right of the browser (in the address bar), and make sure that the correct microphone is selected.</p>
 
-				<input type="button" value="Live Input On" id="liveInputToggleBtn">
-				
-				<div id="detector">
-					<div class="pitch"><span id="pitch">--</span>Hz</div>
-					<div class="note"><span id="note">-</span></div>   
-					<div id="cent"><span id="centAmount">--</span><span id="flat"> cents &#9837;</span><span id="sharp"> cents &#9839;</span></div>
+				<input type="button" value="Live Input On" id="liveInputToggleBtn">			
+
+				<div id="display">
+
+					<div id="live">
+						<div class="pitch"><span id="livePitch">--</span>Hz</div>
+						<div class="note"><span id="liveNote">-</span></div>   
+						<div id="liveCent"><span id="liveCentAmount">--</span><span id="flat">cents &#9837;</span><span id="sharp">cents &#9839;</span></div>
+					</div>
+
+					<div id="wholeSample">
+						<div class="pitch"><span id="wholeSamplePitch">--</span>Hz</div>
+						<div class="note"><span id="wholeSampleNote">-</span></div>   
+						<div id="wholeSampleCent"><span id="wholeSampleCentAmount">--</span><span id="flat">cents &#9837;</span><span id="sharp">cents &#9839;</span></div>
+					</div>
 				</div>
+
+				<p>The value displayed on the left, is the live representation of the input. You will be able to see the different frequencies displayed in real time.</p>
+				<p>The value displayed on the right, is the 'true' representation of the input. It calculates the values based on the whole duration of the input.</p>
+
 			</div>
 
 			<footer>
