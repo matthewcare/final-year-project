@@ -3,23 +3,33 @@ navigator.getMedia = (navigator.getUserMedia ||
                       navigator.mozGetUserMedia ||
                       navigator.msGetUserMedia);
 
-var stream = {
+var errorLogger = function (err) {
+    if (err)
+        console.log(err);
+}
 
+var stream = {
+    // Constants
+    BUFFERLENGTH: 1024,
+    MINVAL: 134,
+    NOTESTRINGS: ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
+
+    // Variables
     analyser: null,
     audioContext: null,
     localStream: null,
     animationFrameId: null,
     tracks: null,
     buffer: null,
-    bufferLength: 1024,
-    MINVAL: 134,
     detectorElement: null,
     pitchElement: null,
     noteElement: null,
     centElement: null,
     centAmount: null,
-    noteStrings: ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
-    avarageArray: [],
+    meanValue: null,
+    medianValue: null,
+    modeValue: null,
+    frequencyArray: [],
 
     startMedia: function () {
         this.pitchElement = document.getElementById('pitch');
@@ -27,8 +37,8 @@ var stream = {
         this.centElement = document.getElementById('cent');
         this.centAmount = document.getElementById('centAmount');
         this.audioContext = new webkitAudioContext();
-        this.buffer = new Uint8Array(this.bufferLength);
-        this.initUserMedia({audio: true}, this.gotStream.bind(this), this.errorCb());
+        this.buffer = new Uint8Array(this.BUFFERLENGTH);
+        this.initUserMedia({audio: true}, this.gotStream.bind(this), errorLogger);
     },
 
     initUserMedia: function (obj, cb, err) {
@@ -62,15 +72,15 @@ var stream = {
             lastZero = -1,
             t = 0;
 
-        while (i < this.bufferLength && (this.buffer[i] > 128)) {
+        while (i < this.BUFFERLENGTH && (this.buffer[i] > 128)) {
             i++;
         }
 
-        if (i >= this.bufferLength) {
+        if (i >= this.BUFFERLENGTH) {
             return -1;
         }
 
-        while (i < this.bufferLength && ((t = this.buffer[i]) < this.MINVAL)) {
+        while (i < this.BUFFERLENGTH && ((t = this.buffer[i]) < this.MINVAL)) {
             if (t >= 128) {
                 if (lastZero === -1) {
                     lastZero = i;
@@ -81,11 +91,21 @@ var stream = {
             i++;
         }
 
+        // while (i < this.BUFFERLENGTH) {
+        //     t = this.buffer[i];
+        //     if (t >= 128 && t < this.MINVAL) { // when t is between 128 and 133
+        //         lastZero = (t === 128 && lastZero === -1) ? i : -1;
+        //     }
+        //     i++
+        // }
+
+        // lastZero = lastZero === -1 ? i : -1;
+
         if (lastZero === -1) {
             lastZero = i;
         }
 
-        if (i === this.bufferLength) {
+        if (i === this.BUFFERLENGTH) {
             return -1;
         }
 
@@ -123,6 +143,15 @@ var stream = {
             }
         }
 
+        // for (n = 0; n < 1000; n++) {
+        //     if (lastZero === -1) break;
+        //     nextZero = this.findNextPositiveZeroCrossing(lastZero + 1);
+        //     if (nextZero > -1) {
+        //         cycles.push(nextZero - lastZero);
+        //     }
+        //     lastZero = nextZero;
+        // }
+
         numberOfCycles = cycles.length;
 
         for (i = 0; i < numberOfCycles; i++) {
@@ -142,8 +171,8 @@ var stream = {
         } else {
             this.pitchElement.innerText = Math.floor(frequency);
             note =  this.noteFromPitch(frequency);
-            cent = this.centsOffFromPitch(frequency, note);
-            this.noteElement.innerText = this.noteStrings[note % 12];
+            cent = this.centsOffFromPitch(frequency, note);                                  // Split this part into its own function
+            this.noteElement.innerText = this.NOTESTRINGS[note % 12];
             if (cent === 0) {
                 this.centElement.className = "";
                 this.centAmount.innerText = "--";
@@ -157,37 +186,63 @@ var stream = {
             }
         }
 
-        this.averaging(frequency);
+        this.measuresOfCentralTendancy(frequency);
 
-        if (!window.requestAnimationFrame) {
-            window.requestAnimationFrame = window.webkitRequestAnimationFrame;
-        }
-        this.animationFrameId = window.requestAnimationFrame(this.updatePitch.bind(this));
+        // if (!window.requestAnimationFrame) {
+        //     window.requestAnimationFrame = window.webkitRequestAnimationFrame;
+        // }
+        // this.animationFrameId = window.requestAnimationFrame(this.updatePitch.bind(this));
+
+        setTimeout(this.updatePitch.bind(this), 4);
+
     },
 
+    mean: function (values) {
+        var sumOfArray = null;
 
-    averaging: function (frequency) {
-        var average = null,
-            sum = null;
+        sumOfArray = values.reduce(function (a, b) {return a + b;});
+        this.meanValue = sumOfArray / values.length;
+    },
 
-        if (this.avarageArray.length === 60) {
-            console.log(this.avarageArray);
-            sum = this.avarageArray.reduce(function (a, b) {
-                return a + b;
-            });
-            average = sum / this.avarageArray.length;
-            console.log(this.noteStrings[this.noteFromPitch(frequency) % 12]);
-            this.avarageArray.length = 0;
-        } else if (frequency === 0) {
-            this.avarageArray.length = 0;
+    median: function (values) {
+        values.sort(function (a, b) {return a - b;});
+
+        var half = Math.floor(values.length / 2);
+
+        if (values.length % 2) {
+            this.medianValue = values[half];
         } else {
-            this.avarageArray.push(frequency);
+            this.medianValue = (values[half - 1] + values[half]) / 2.0;
         }
     },
 
-    errorCb: function (err) {
-        if (err) {
-            console.log('Massive error');
+    mode: function (values) {
+        var frequency = {},
+            v = null,          // array of frequency.
+            max = null;        // holds the max frequency.
+
+        for (v in values) {
+            frequency[values[v]] = (frequency[values[v]] || 0) + 1; // increment frequency.
+            if (frequency[values[v]] > max) {                       // is this frequency > max so far ?
+                max = frequency[values[v]];                         // update max.
+                this.modeValue = values[v];                         // update mode.
+            }
+        }
+    },
+
+    measuresOfCentralTendancy: function (frequency) {
+        if (this.frequencyArray.length > 50 && frequency === 0) {  //  consider creating maximim array length?
+            //this.mean(this.frequencyArray);
+            //this.median(this.frequencyArray);
+            this.mode(this.frequencyArray);
+            // console.log('Mean: ' + this.meanValue + ' ' +  this.NOTESTRINGS[this.noteFromPitch(this.meanValue) % 12]);
+            // console.log('Median: ' + this.medianValue + ' ' +  this.NOTESTRINGS[this.noteFromPitch(this.medianValue) % 12]);
+            console.log('Mode: ' + this.modeValue + ' ' + this.NOTESTRINGS[this.noteFromPitch(this.modeValue) % 12] + '\n');
+            this.frequencyArray.length = 0;
+        } else if (frequency === 0 && this.frequencyArray.length > 0) {
+            this.frequencyArray.length = 0;
+        } else {
+            this.frequencyArray.push(Math.round(frequency));
         }
     },
 
