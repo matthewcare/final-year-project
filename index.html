@@ -13,11 +13,11 @@
 			</header>
 			<div id="content">
 				<h2>Sound analyser</h2>
-				<p>Analyses sound input via microphone or audio mixer, and tells you what note the sound makes. The analyser works best with whistling at the moment, but I am working on making it more accurate for use with musical instuments.</p>
-				<p>This project only works on <a href="https://www.google.com/intl/en/chrome/browser/">Chrome</a> version 28+</p>
-				<p>Chrome will ask for permission to use the microphone at the top of the screen once you turn live input on.</p>
-				<p>If it doesn't work click the camera button at the top right of the browser (in the address bar), and make sure that the correct microphone is selected.</p>
-
+				<p>Analyses sound input via microphone or audio mixer, and tells you what note the sound makes.</p>
+				<p>This project works on <a href="https://www.google.com/intl/en/chrome/browser/" target="_blank">Chrome</a> version 28+, and now also works on <a href="http://nightly.mozilla.org/" target="_blank">Firefox Nightly</a>.</p>
+				<p>Managed to get it to work with <a href="http://www.google.co.uk/intl/en/chrome/browser/mobile/" target="_blank">Chrome for Mobile</a>, version 31+. It might also work for earlier versions, but I have no way of testing that at the moment</p> 
+				<p>Your browser will ask for permission to use the microphone at the top of the screen once you turn live input on.</p>
+				
 				<input type="button" value="Live Input On" id="liveInputToggleBtn">			
 
 				<div id="display">
@@ -38,6 +38,11 @@
 				<p>The value displayed on the left, is the live representation of the input. You will be able to see the different frequencies displayed in real time.</p>
 				<p>The value displayed on the right, is the 'true' representation of the input. It calculates the values based on the whole duration of the input.</p>
 
+				<p>If it doesn't work, check:</p>
+				<ul>
+					<li>(Chrome) Click the camera button at the top right of the browser (in the address bar), and make sure that the correct microphone is selected.</li>
+					<li>(Firefox) Refresh the page, and turn live input on again. Make sure you selected the correct input device before clicking 'share'.</li>
+				</ul>
 			</div>
 
 			<footer>

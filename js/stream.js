@@ -11,7 +11,7 @@ var errorLogger = function (err) {
 var stream = {
     // Constants
     BUFFERLENGTH: 1024,
-    MINVAL: 134,
+    MINVAL: 134,  // 128 === 0. MINVAL = minimum detected signal
     NOTESTRINGS: ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
 
     // Variables
@@ -21,29 +21,14 @@ var stream = {
     animationFrameId: null,
     tracks: null,
     buffer: null,
-    livePitchElement: null,
-    liveNoteElement: null,
-    liveCentElement: null,
-    liveCentAmount: null,
-    wholeSamplePitchElement: null,
-    wholeSampleNoteElement: null,
-    wholeSampleCentElement: null,
-    wholeSampleCentAmount: null,
     meanValue: null,
     medianValue: null,
     modeValue: null,
     frequencyArray: [],
 
     startMedia: function () {
-        this.livePitchElement = document.getElementById('livePitch');
-        this.liveNoteElement = document.getElementById('liveNote');
-        this.liveCentElement = document.getElementById('liveCent');
-        this.liveCentAmount = document.getElementById('liveCentAmount');
-        this.wholeSamplePitchElement = document.getElementById('wholeSamplePitch');
-        this.wholeSampleNoteElement = document.getElementById('wholeSampleNote');
-        this.wholeSampleCentElement = document.getElementById('wholeSampleCent');
-        this.wholeSampleCentAmount = document.getElementById('wholeSampleCentAmount');
-        this.audioContext = new webkitAudioContext();
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        this.audioContext = new AudioContext();          
         this.buffer = new Uint8Array(this.BUFFERLENGTH);
         this.initUserMedia({audio: true}, this.gotStream.bind(this), errorLogger);
     },
@@ -62,8 +47,7 @@ var stream = {
     },
 
     noteFromPitch: function (frequency) {
-        var noteNum = 12 * (Math.log(frequency / 440) / Math.log(2));
-        return Math.round(noteNum) + 69;
+        return Math.round(12 * (Math.log(frequency / 440) / Math.log(2))) + 69;
     },
 
     frequencyFromNoteNumber: function (note) {
@@ -79,6 +63,7 @@ var stream = {
             lastZero = -1,
             t = 0;
 
+        // Increment i until 0 or negative
         while (i < this.BUFFERLENGTH && (this.buffer[i] > 128)) {
             i++;
         }
@@ -87,6 +72,7 @@ var stream = {
             return -1;
         }
 
+        // Increment i until above MINVAL
         while (i < this.BUFFERLENGTH && ((t = this.buffer[i]) < this.MINVAL)) {
             if (t >= 128) {
                 if (lastZero === -1) {
@@ -106,8 +92,7 @@ var stream = {
         //     i++
         // }
 
-        // lastZero = lastZero === -1 ? i : -1;
-
+        // CHeck to see if MINVAL was jumped over
         if (lastZero === -1) {
             lastZero = i;
         }
@@ -116,10 +101,12 @@ var stream = {
             return -1;
         }
 
+        //Check to see if first sample was 0
         if (lastZero === 0) {
             return 0;
         }
 
+        // If 0 was between two values
         t = (128 - this.buffer[lastZero - 1]) / (this.buffer[lastZero] - this.buffer[lastZero - 1]);
         return lastZero + t;
     },
@@ -170,6 +157,10 @@ var stream = {
 
     },
 
+    getElement: function (elementId) {
+        return document.getElementById(elementId);
+    },
+
     updateDisplay: function (numberOfCycles, frequency, id) {
 
         var note = 0,
@@ -177,51 +168,50 @@ var stream = {
 
         if (id === 1) {
             if (numberOfCycles === 0) {
-                this.livePitchElement.innerText = "--";
-                this.liveNoteElement.innerText = "-";
-                this.liveCentElement.className = "";
-                this.liveCentAmount.innerText = "--";
+                this.getElement('livePitch').innerHTML = "--";
+                this.getElement('liveNote').innerHTML = "-";
+                this.getElement('liveCent').className = "";
+                this.getElement('liveCentAmount').innerHTML = "--";
             } else {
-                this.livePitchElement.innerText = Math.floor(frequency);
                 note =  this.noteFromPitch(frequency);
                 cent = this.centsOffFromPitch(frequency, note);
-                this.liveNoteElement.innerText = this.NOTESTRINGS[note % 12];
+                this.getElement('livePitch').innerHTML = Math.floor(frequency);
+                this.getElement('liveNote').innerHTML = this.NOTESTRINGS[note % 12];
 
                 if (cent === 0) {
-                    this.liveCentElement.className = "";
-                    this.liveCentAmount.innerText = "--";
+                    this.getElement('liveCent').className = "";
+                    this.getElement('liveCentAmount').innerHTML = "--";
                 } else {
                     if (cent < 0) {
-                        this.liveCentElement.className = "flat";
+                        this.getElement('liveCent').className = "flat";
                     } else {
-                        this.liveCentElement.className = "sharp";
+                        this.getElement('liveCent').className = "sharp";
                     }
-                    this.liveCentAmount.innerText = Math.abs(cent) + ' ';
+                    this.getElement('liveCentAmount').innerHTML = Math.abs(cent) + ' ';
                 }
             }
         }
 
         if (id === 2) {
-            this.wholeSamplePitchElement.innerText = Math.floor(frequency);
             note =  this.noteFromPitch(frequency);
             cent = this.centsOffFromPitch(frequency, note);
-            this.wholeSampleNoteElement.innerText = this.NOTESTRINGS[note % 12];
+            this.getElement('wholeSamplePitch').innerHTML = Math.floor(frequency);
+            this.getElement('wholeSampleNote').innerHTML = this.NOTESTRINGS[note % 12];
 
             if (cent === 0) {
-                this.wholeSampleCentElement.className = "";
-                this.wholeSampleCentAmount.innerText = "--";
+                this.getElement('wholeSampleCent').className = "";
+                this.getElement('wholeSampleCentAmount').innerHTML = "--";
             } else {
                 if (cent < 0) {
-                    this.wholeSampleCentElement.className = "flat";
+                    this.getElement('wholeSampleCent').className = "flat";
                 } else {
-                    this.wholeSampleCentElement.className = "sharp";
+                    this.getElement('wholeSampleCent').className = "sharp";
                 }
-                this.wholeSampleCentAmount.innerText = Math.abs(cent) + ' ';
+                this.getElement('wholeSampleCentAmount').innerHTML = Math.abs(cent) + ' ';
             }
         }
 
     },
-
 
     mean: function (values) {
         var sumOfArray = null;
@@ -263,7 +253,7 @@ var stream = {
             this.mode(this.frequencyArray);
             // console.log('Mean: ' + this.meanValue + ' ' +  this.NOTESTRINGS[this.noteFromPitch(this.meanValue) % 12]);
             // console.log('Median: ' + this.medianValue + ' ' +  this.NOTESTRINGS[this.noteFromPitch(this.medianValue) % 12]);
-            console.log('Mode: ' + this.modeValue + ' ' + this.NOTESTRINGS[this.noteFromPitch(this.modeValue) % 12] + '\n');
+            // console.log('Mode: ' + this.modeValue + ' ' + this.NOTESTRINGS[this.noteFromPitch(this.modeValue) % 12] + '\n');
             this.updateDisplay(null, this.modeValue, 2);
             this.frequencyArray.length = 0;
         } else if (frequency === 0 && this.frequencyArray.length > 0) {
