@@ -35,7 +35,7 @@ a:hover {
 }
 
 footer {
-	color: #fff;
+	color: #FFF;
 	position: fixed;
 	left: 0em;
 	bottom: 0em;
@@ -52,12 +52,21 @@ footer p {
 }
 
 #liveInputToggleBtn {
+	font-size: 120%;
 	padding: 1em;
 	display: block;
 	margin: 0 auto;
+	background-color: #808080;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
 }
 
-#liveNote, #halfSecondNote, #wholeSampleNote { 
+#liveInputToggleBtn:hover {
+    background: #333;
+}
+
+#liveNote, #wholeSampleNote { 
 	font-size: 900%; 
 }
 
@@ -65,12 +74,11 @@ footer p {
 	width: 60%;
 	height: 20em;
 	border: 0.5em solid #808080;
-	border-radius: 2em;
 	text-align: center;
-	margin: 1em auto;
+	margin: 0.5em auto;
 }
 
-#live, #halfSecond, #wholeSample {
+#live, #wholeSample {
 	display: inline-block;
 	width: 49%;
 }
