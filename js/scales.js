@@ -25,7 +25,16 @@ var scales = {
 
 };
 
+var scalesToString = {
+    
+    returned: function () {
+        var spanId = 0;
 
+        locationText = scales.activeScale.toString().replace(/,/g, ' ');
+        locationText = locationText.replace(/\S+/g, function(a){ return "<span id=" + (spanId++) + ">" + a + "</span>";});
+        return locationText;
+    }
+};
 
 (function () {
 
@@ -35,12 +44,11 @@ var scales = {
             var list = document.getElementsByClassName('scales');
             for (var i = 0, len = list.length; i < len; i++) {
                 list[i].addEventListener('click', function (e) {
-                    locationText = scales.gradeOne[this.id].toString().replace(/,/g, ', ');
-                    location.innerHTML = (locationText);
                     scales.activeScale = scales.gradeOne[this.id];
+                    location.innerHTML = scalesToString.returned(scales.activeScale);
                     analyser.userInputArray = [];
                     e.preventDefault();
-                }, false);;
+                }, false);
             };
         };
 

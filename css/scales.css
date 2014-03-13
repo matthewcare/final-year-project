@@ -1,11 +1,17 @@
 #currentScale {
 	text-align: center;
-}
-
-#userInputArray {
-	text-align: center;
+	font-weight: bold;
+	font-size: 130%;
 }
 
 #outputParagraph {
 	text-align: center;
+}
+
+#correct {
+	color: #7FFF00;
+}
+
+#incorrect {
+	color: red;
 }

@@ -20,6 +20,8 @@ var analyser = {
     localStream: null,
     animationFrameId: null,
     buffer: null,
+    currentCharacter: 0,
+    incorrect: false,
     frequencyArray: [],
     userInputArray: [],
 
@@ -145,17 +147,18 @@ var analyser = {
         return document.getElementById(elementId);
     },
 
-    updateDisplay: function (numberOfCycles, frequency) {
+    updateDisplay: function (frequency) {
 
         var note = 0,
             note =  math.noteFromPitch(frequency),
-            display = document.getElementById('userInputArray');
+            currentScaleText = document.getElementById('currentScale'),
+            id = 0;
 
+        if (this.incorrect) {
+            currentScaleText.innerHTML = scalesToString.returned();
+        };
 
         this.userInputArray.push(this.NOTESTRINGS[note % 12]);
-
-        display.innerHTML = this.userInputArray.toString().replace(/,/g, ', ');
-
         this.compareArrays();
     },
 
@@ -163,14 +166,19 @@ var analyser = {
         var userInputArrayLength = (this.userInputArray.length) - 1,
             output = document.getElementById('outputParagraph');
 
+
         if (scales.activeScale === null) {
             output.innerHTML = ("You must select a scale");
             this.userInputArray = [];
         } else if (this.userInputArray[userInputArrayLength] === scales.activeScale[userInputArrayLength]) {
-            output.innerHTML = ("Correct");
+            document.getElementById(this.currentCharacter).id = "correct";
+            this.currentCharacter = this.currentCharacter + 1;
+            this.incorrect = false;
         } else {
-            output.innerHTML = ("Incorrect");
+            document.getElementById(this.currentCharacter).id = "incorrect";
+            this.currentCharacter = 0;
             this.userInputArray = [];
+            this.incorrect = true;
         }
         
     },
@@ -183,7 +191,7 @@ var analyser = {
             // console.log('Mean: ' + math.meanValue + ' ' +  this.NOTESTRINGS[this.noteFromPitch(this.meanValue) % 12]);
             // console.log('Median: ' + math.medianValue + ' ' +  this.NOTESTRINGS[this.noteFromPitch(this.medianValue) % 12]);
             // console.log('Mode: ' + math.modeValue + ' ' + this.NOTESTRINGS[this.noteFromPitch(this.modeValue) % 12] + '\n');
-            this.updateDisplay(null, math.modeValue, 2);
+            this.updateDisplay(math.modeValue);
             this.frequencyArray.length = 0;
         } else if (frequency === 0 && this.frequencyArray.length > 0) {
             this.frequencyArray.length = 0;
