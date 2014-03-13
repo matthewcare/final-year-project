@@ -8,7 +8,7 @@ var errorLogger = function (err) {
         console.log(err);
 }
 
-var stream = {
+var analyser = {
     // Constants
     BUFFERLENGTH: 1024,
     MINVAL: 134,  // 128 === 0. MINVAL = minimum detected signal
@@ -19,7 +19,6 @@ var stream = {
     audioContext: null,
     localStream: null,
     animationFrameId: null,
-    tracks: null,
     buffer: null,
     meanValue: null,
     medianValue: null,
@@ -146,7 +145,7 @@ var stream = {
         }
 
         this.updateDisplay(numberOfCycles, frequency, 1);
-        this.measuresOfCentralTendancy(frequency);
+        this.measuresOfCentralTendency(frequency);
 
         // if (!window.requestAnimationFrame) {
         //     window.requestAnimationFrame = window.webkitRequestAnimationFrame;
@@ -246,7 +245,7 @@ var stream = {
         }
     },
 
-    measuresOfCentralTendancy: function (frequency) {
+    measuresOfCentralTendency: function (frequency) {
         if (this.frequencyArray.length > 50 && frequency === 0) {  //  consider creating maximim array length?
             //this.mean(this.frequencyArray);
             //this.median(this.frequencyArray);

@@ -6,11 +6,11 @@
 
 		liveInputToggleBtn.addEventListener('click', function (e) {
 			if (toggle === 0) {
-				stream.startMedia();
+				analyser.startMedia();
 				toggle = 1;
 				liveInputToggleBtn.value = "Live Input Off";
 			} else {
-				stream.stopMedia();
+				analyser.stopMedia();
 				toggle = 0;
 				liveInputToggleBtn.value = "Live Input On";
 			}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="author" content="Matthew Care">
+		<link rel="stylesheet" href="../css/style.css">
+		<script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-40851372-1', 'matthewcare.co.uk');
+            ga('send', 'pageview');
+        </script>
+		<title>Tuner</title>
+	</head>
+	<body>
+		<div id="container">
+			<header>
+				<h1><a href="../index.html">matthewcare.co.uk</a></h1>
+			</header>
+			<div id="content">
+				<h2>Tuner</h2>
+
+						
+				<div id="display">
+					<div id="live">
+						<div class="pitch"><span id="livePitch">--</span>Hz</div>
+						<div class="note"><span id="liveNote">-</span></div>   
+						<div id="liveCent"><span id="liveCentAmount">--</span><span id="flat">cents &#9837;</span><span id="sharp">cents &#9839;</span></div>
+					</div>
+
+					<div id="wholeSample">
+						<div class="pitch"><span id="wholeSamplePitch">--</span>Hz</div>
+						<div class="note"><span id="wholeSampleNote">-</span></div>   
+						<div id="wholeSampleCent"><span id="wholeSampleCentAmount">--</span><span id="flat">cents &#9837;</span><span id="sharp">cents &#9839;</span></div>
+					</div>
+				</div>
+
+				<input type="button" value="Live Input On" id="liveInputToggleBtn">
+				
+				<div id="info">
+					<p><a href="information.html">Information</a></p>
+				</div>			
+
+			</div>
+
+			<footer>
+					<p>&copy; Matthew Care</p>
+			</footer>
+			
+		</div>
+		<script src="../js/analyser.js"></script>
+		<script src="../js/main.js"></script>
+	</body>
+</html>
