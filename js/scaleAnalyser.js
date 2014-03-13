@@ -20,10 +20,8 @@ var analyser = {
     localStream: null,
     animationFrameId: null,
     buffer: null,
-    meanValue: null,
-    medianValue: null,
-    modeValue: null,
     frequencyArray: [],
+    userInputArray: [],
 
     startMedia: function () {
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -43,18 +41,6 @@ var analyser = {
         this.analyser.fftSize = 2048;
         mediaStreamSource.connect(this.analyser);
         this.updatePitch();
-    },
-
-    noteFromPitch: function (frequency) {
-        return Math.round(12 * (Math.log(frequency / 440) / Math.log(2))) + 69;
-    },
-
-    frequencyFromNoteNumber: function (note) {
-        return 440 * Math.pow(2, (note - 69) / 12);
-    },
-
-    centsOffFromPitch: function (frequency, note) {
-        return Math.floor(1200 * Math.log(frequency / this.frequencyFromNoteNumber(note)) / Math.log(2));
     },
 
     findNextPositiveZeroCrossing: function (start) {
@@ -144,7 +130,6 @@ var analyser = {
             frequency = this.audioContext.sampleRate / sum;
         }
 
-        this.updateDisplay(numberOfCycles, frequency, 1);
         this.measuresOfCentralTendency(frequency);
 
         // if (!window.requestAnimationFrame) {
@@ -160,100 +145,45 @@ var analyser = {
         return document.getElementById(elementId);
     },
 
-    updateDisplay: function (numberOfCycles, frequency, id) {
+    updateDisplay: function (numberOfCycles, frequency) {
 
         var note = 0,
-            cent = 0;
+            note =  math.noteFromPitch(frequency),
+            display = document.getElementById('userInputArray');
 
-        if (id === 1) {
-            if (numberOfCycles === 0) {
-                this.getElement('livePitch').innerHTML = "--";
-                this.getElement('liveNote').innerHTML = "-";
-                this.getElement('liveCent').className = "";
-                this.getElement('liveCentAmount').innerHTML = "--";
-            } else {
-                note =  this.noteFromPitch(frequency);
-                cent = this.centsOffFromPitch(frequency, note);
-                this.getElement('livePitch').innerHTML = Math.floor(frequency);
-                this.getElement('liveNote').innerHTML = this.NOTESTRINGS[note % 12];
 
-                if (cent === 0) {
-                    this.getElement('liveCent').className = "";
-                    this.getElement('liveCentAmount').innerHTML = "--";
-                } else {
-                    if (cent < 0) {
-                        this.getElement('liveCent').className = "flat";
-                    } else {
-                        this.getElement('liveCent').className = "sharp";
-                    }
-                    this.getElement('liveCentAmount').innerHTML = Math.abs(cent) + ' ';
-                }
-            }
-        }
+        this.userInputArray.push(this.NOTESTRINGS[note % 12]);
 
-        if (id === 2) {
-            note =  this.noteFromPitch(frequency);
-            cent = this.centsOffFromPitch(frequency, note);
-            this.getElement('wholeSamplePitch').innerHTML = Math.floor(frequency);
-            this.getElement('wholeSampleNote').innerHTML = this.NOTESTRINGS[note % 12];
+        display.innerHTML = this.userInputArray.toString().replace(/,/g, ', ');
 
-            if (cent === 0) {
-                this.getElement('wholeSampleCent').className = "";
-                this.getElement('wholeSampleCentAmount').innerHTML = "--";
-            } else {
-                if (cent < 0) {
-                    this.getElement('wholeSampleCent').className = "flat";
-                } else {
-                    this.getElement('wholeSampleCent').className = "sharp";
-                }
-                this.getElement('wholeSampleCentAmount').innerHTML = Math.abs(cent) + ' ';
-            }
-        }
-
+        this.compareArrays();
     },
 
-    mean: function (values) {
-        var sumOfArray = null;
+    compareArrays: function () {
+        var userInputArrayLength = (this.userInputArray.length) - 1,
+            output = document.getElementById('outputParagraph');
 
-        sumOfArray = values.reduce(function (a, b) {return a + b;});
-        this.meanValue = sumOfArray / values.length;
-    },
-
-    median: function (values) {
-        values.sort(function (a, b) {return a - b;});
-
-        var half = Math.floor(values.length / 2);
-
-        if (values.length % 2) {
-            this.medianValue = values[half];
+        if (scales.activeScale === null) {
+            output.innerHTML = ("You must select a scale");
+            this.userInputArray = [];
+        } else if (this.userInputArray[userInputArrayLength] === scales.activeScale[userInputArrayLength]) {
+            output.innerHTML = ("Correct");
         } else {
-            this.medianValue = (values[half - 1] + values[half]) / 2.0;
+            output.innerHTML = ("Incorrect");
+            this.userInputArray = [];
         }
-    },
-
-    mode: function (values) {
-        var frequency = {},
-            v = null,          // array of frequency.
-            max = null;        // holds the max frequency.
-
-        for (v in values) {
-            frequency[values[v]] = (frequency[values[v]] || 0) + 1; // increment frequency.
-            if (frequency[values[v]] > max) {                       // is this frequency > max so far ?
-                max = frequency[values[v]];                         // update max.
-                this.modeValue = values[v];                         // update mode.
-            }
-        }
+        
     },
 
     measuresOfCentralTendency: function (frequency) {
         if (this.frequencyArray.length > 50 && frequency === 0) {  //  consider creating maximim array length?
-            //this.mean(this.frequencyArray);
-            //this.median(this.frequencyArray);
-            this.mode(this.frequencyArray);
-            // console.log('Mean: ' + this.meanValue + ' ' +  this.NOTESTRINGS[this.noteFromPitch(this.meanValue) % 12]);
-            // console.log('Median: ' + this.medianValue + ' ' +  this.NOTESTRINGS[this.noteFromPitch(this.medianValue) % 12]);
-            // console.log('Mode: ' + this.modeValue + ' ' + this.NOTESTRINGS[this.noteFromPitch(this.modeValue) % 12] + '\n');
-            this.updateDisplay(null, this.modeValue, 2);
+            //math.mean(this.frequencyArray);
+            //math.median(this.frequencyArray);
+            math.mode(this.frequencyArray);
+            // console.log('Mean: ' + math.meanValue + ' ' +  this.NOTESTRINGS[this.noteFromPitch(this.meanValue) % 12]);
+            // console.log('Median: ' + math.medianValue + ' ' +  this.NOTESTRINGS[this.noteFromPitch(this.medianValue) % 12]);
+            // console.log('Mode: ' + math.modeValue + ' ' + this.NOTESTRINGS[this.noteFromPitch(this.modeValue) % 12] + '\n');
+            this.updateDisplay(null, math.modeValue, 2);
             this.frequencyArray.length = 0;
         } else if (frequency === 0 && this.frequencyArray.length > 0) {
             this.frequencyArray.length = 0;

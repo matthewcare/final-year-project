@@ -57,9 +57,9 @@ footer p {
 	display: block;
 	margin: 0 auto;
 	background-color: #808080;
-    color: #FFF;
-    cursor: pointer;
-    border: none;
+	color: #FFF;
+	cursor: pointer;
+	border: none;
 }
 
 #liveInputToggleBtn:hover {

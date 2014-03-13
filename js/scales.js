@@ -29,18 +29,20 @@ var scales = {
 
 (function () {
 
-    var location = document.getElementById('currentScale');
+    var location = document.getElementById('currentScale'),
 
-    var addEventListenerByClass = function () {
-        var list = document.getElementsByClassName('scales');
-        for (var i = 0, len = list.length; i < len; i++) {
-            list[i].addEventListener('click', function (e) {
-                location.innerHTML = (scales.gradeOne[this.id]);
-                scales.activeScale = scales.gradeOne[this.id];
-                e.preventDefault();
-            }, false);;
+        addEventListenerByClass = function () {
+            var list = document.getElementsByClassName('scales');
+            for (var i = 0, len = list.length; i < len; i++) {
+                list[i].addEventListener('click', function (e) {
+                    locationText = scales.gradeOne[this.id].toString().replace(/,/g, ', ');
+                    location.innerHTML = (locationText);
+                    scales.activeScale = scales.gradeOne[this.id];
+                    analyser.userInputArray = [];
+                    e.preventDefault();
+                }, false);;
+            };
         };
-    };
 
     window.addEventListener('load', function loaded() {
         addEventListenerByClass();
