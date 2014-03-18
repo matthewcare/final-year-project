@@ -47,6 +47,9 @@ var scalesToString = {
                     scales.activeScale = scales.gradeOne[this.id];
                     location.innerHTML = scalesToString.returned(scales.activeScale);
                     analyser.userInputArray = [];
+                    if (stream.analyser === null) {
+                        stream.startMedia('scales');
+                    };
                     e.preventDefault();
                 }, false);
             };
