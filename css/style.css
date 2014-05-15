@@ -66,7 +66,7 @@ footer p {
     background: #333;
 }
 
-#liveNote, #wholeSampleNote { 
+#wholeSampleNote { 
 	font-size: 900%; 
 }
 
@@ -78,7 +78,13 @@ footer p {
 	margin: 0.5em auto;
 }
 
-#live, #wholeSample {
+progress {
+	width: 40%;
+	display: block;
+	margin: 0.5em auto;
+}
+
+#wholeSample {
 	display: inline-block;
 	width: 49%;
 }

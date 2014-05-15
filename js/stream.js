@@ -25,7 +25,6 @@ var stream = {
         this.buffer = new Uint8Array(this.BUFFERLENGTH);
         this.task = id;
         this.initUserMedia({audio: true}, this.gotStream.bind(this), errorLogger);
-
     },
 
     initUserMedia: function (obj, cb, err) {
@@ -38,6 +37,6 @@ var stream = {
         this.analyser = this.audioContext.createAnalyser();
         this.analyser.fftSize = 2048;
         mediaStreamSource.connect(this.analyser);
-        analyser.updatePitch(this.task);
+        analyser.frequencyLoop(this.task);
     },
 }

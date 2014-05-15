@@ -15,3 +15,23 @@
 #incorrect {
 	color: red;
 }
+
+#buttons {
+	text-align: center;
+}
+
+input {
+	font-size: 100%;
+	padding: 1em;
+	display: inline-block;
+	margin: 0 auto;
+	background-color: #808080;
+	color: #FFF;
+	cursor: pointer;
+	border: none;
+	width: 10em;
+}
+
+input:hover {
+    background: #333;
+}
