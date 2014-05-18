@@ -84,6 +84,7 @@ var scalesToString = {
                     scales.activeScale = scales.gradeOne[this.id];
                     location.innerHTML = scalesToString.returned(scales.activeScale);
                     analyser.userInputArray = [];
+                    scales.currentCharacter = 0;
                     if (stream.analyser === null) {
                         stream.startMedia('scales');
                     };
