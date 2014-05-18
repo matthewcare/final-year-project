@@ -26,6 +26,8 @@ test = {
 		var display = document.getElementById('display'),
 			note = document.getElementById('note'),
 			noteLine = document.getElementById('noteLine'),
+			noteTailUp = document.getElementById('noteTailUp'),
+			noteTailDown = document.getElementById('noteTailDown'),
 			items = [
 					["C", "4"],
 					["D", "4"],
@@ -57,6 +59,8 @@ test = {
 					["D", "4"],
 					["C", "4"]
 					],
+
+
 			item = items[Math.floor(Math.random()*items.length)],
 			value = this.weightings(item[0]),
 			x = value*(50) + ((item[1]-4)*350);
@@ -65,6 +69,14 @@ test = {
 				noteLine.style.visibility="visible";
 			} else {
 				noteLine.style.visibility="hidden";
+			}
+
+			if (x>=400) {
+				noteTailDown.style.visibility="visible"
+				noteTailUp.style.visibility="hidden"
+			} else {
+				noteTailUp.style.visibility="visible"
+				noteTailDown.style.visibility="hidden"
 			}
 	
 

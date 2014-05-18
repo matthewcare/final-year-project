@@ -1,0 +1,12 @@
+#svgWindow {
+	width: 50%;
+	height: 20em;
+}
+
+#noteTailUp {
+	visibility: hidden;
+}
+
+#noteTailDown {
+	visibility: hidden;
+}
