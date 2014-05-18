@@ -86,4 +86,5 @@ test = {
 
 window.addEventListener('load', function loaded() {
         test.testing()
+        test.fillContent()
     }, false);
