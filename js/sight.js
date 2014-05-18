@@ -1,5 +1,5 @@
-test = {
-	testing: function () {
+sight = {
+	loaded: function () {
 		var button = document.getElementById('button');
 
 		button.addEventListener('click', function (e) {
@@ -85,6 +85,6 @@ test = {
 };
 
 window.addEventListener('load', function loaded() {
-        test.testing()
-        test.fillContent()
+        sight.loaded()
+        sight.fillContent()
     }, false);
