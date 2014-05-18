@@ -25,6 +25,7 @@ test = {
 	fillContent: function () {
 		var display = document.getElementById('display'),
 			note = document.getElementById('note'),
+			noteLine = document.getElementById('noteLine'),
 			items = [
 					["C", "4"],
 					["D", "4"],
@@ -59,6 +60,13 @@ test = {
 			item = items[Math.floor(Math.random()*items.length)],
 			value = this.weightings(item[0]),
 			x = value*(50) + ((item[1]-4)*350);
+
+			if (x%100 === 0) {
+				noteLine.style.visibility="visible";
+			} else {
+				noteLine.style.visibility="hidden";
+			}
+	
 
 		note.setAttribute('transform', ('translate(0,' + (-x) + ')'))
 	}
