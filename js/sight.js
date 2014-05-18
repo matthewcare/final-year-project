@@ -3,7 +3,7 @@ sight = {
 		var button = document.getElementById('button');
 
 		button.addEventListener('click', function (e) {
-	            test.fillContent()
+	            sight.fillContent()
 	            e.preventDefault()
 	        }, false);
 	},
