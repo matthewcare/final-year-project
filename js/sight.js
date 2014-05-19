@@ -6,7 +6,7 @@ sight = {
 		svgWindowWidth = svgWindow.offsetWidth;
 
 		button.addEventListener('click', function (e) {
-            sight.fillContent()
+            sight.getSvgWindowValues()
             e.preventDefault()
         }, false);
 
@@ -14,7 +14,7 @@ sight = {
 			sight.getSvgWindowValues();
         }, false);
 
-        renderNotes(svgWindowWidth)
+        this.getSvgWindowValues()
 	},
 
 	notes: function () {
@@ -69,26 +69,27 @@ sight = {
 		var svgWindow = document.getElementById('svgWindow');
 		svgWindowHeight = svgWindow.offsetHeight;
 		svgWindowWidth = svgWindow.offsetWidth;
+		this.calculateNotes(svgWindowWidth)
 	},
 
-	fillContent: function () {
-		var display = document.getElementById('display'),
-			note = document.getElementById('note'),
+	calculateNotes: function (svgWindowWidth) {
+		var note = document.getElementById('note'),
 			noteStrikeThrough = document.getElementById('noteStrikeThrough'),
 			noteUnderscore = document.getElementById('noteUnderscore'),
 			noteTailUp = document.getElementById('noteTailUp'),
 			noteTailDown = document.getElementById('noteTailDown'),
 
-			notes = notes()
+			notes = this.notes()
 
-			item = items[Math.floor(Math.random()*items.length)],
-			value = this.getValues(item[0]),
-			x = value*(50) + ((item[1]-4)*350);
+		for (var i = 0; i < svgWindowWidth; i++) {
+			var item = notes[Math.floor(Math.random()*notes.length)],
+				value = this.getValues(item[0]),
+				x = value*(50) + ((item[1]-4)*350);
 
-			if (x%100 === 0) {
+			if (x % 100 === 0) {
 				noteStrikeThrough.style.visibility="visible";
 				noteUnderscore.style.visibility="hidden";
-			} else if (x%100 === 50) {
+			} else if (x % 100 === 50) {
 				noteUnderscore.style.visibility="visible";
 				noteStrikeThrough.style.visibility="hidden";
 			}
@@ -100,13 +101,17 @@ sight = {
 				noteTailUp.style.visibility="visible"
 				noteTailDown.style.visibility="hidden"
 			}
-	
+			this.renderNotes(x)
+		}
 
+	},
+
+	renderNotes: function (x) {
 		note.setAttribute('transform', ('translate(0,' + (-x) + ')'))
 	}
 };
 
 window.addEventListener('load', function loaded() {
         sight.loaded()
-        sight.fillContent()
+        sight.calculateNotes()
     }, false);
