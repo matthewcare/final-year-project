@@ -76,12 +76,14 @@ sight = {
 
 	calculateNotes: function (svgWindowWidth) {
 		var	notes = this.notes(),
-			numberToGenerate = svgWindowWidth/60;
+			getBetweenNotes = 45,
+			firstNoteGap = 80,
+			numberToGenerate = ((svgWindowWidth - firstNoteGap) / 45) -1;
 
 		for (var i = 0; i < numberToGenerate; i++) {
 			var note = notes[Math.floor(Math.random()*notes.length)],
 				value = this.getValues(note[0]),
-				x = i * 45,
+				x = i * getBetweenNotes,
 				y = (value*(15) + ((note[1]-4)*105)),
 				noteType = null,
 				noteStrikeThrough = null,
@@ -105,7 +107,6 @@ sight = {
 				noteTailUp = true;
 				noteTailDown = false;
 			}
-
 
 			if (noteStrikeThrough && noteTailUp) {
 				noteType = '#noteStrikeThroughTailUp';
