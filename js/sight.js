@@ -1,14 +1,23 @@
 sight = {
 	loaded: function () {
-		var button = document.getElementById('button');
+		var button = document.getElementById('button'),
+			svgWindow = document.getElementById('svgWindow');
+		svgWindowHeight = svgWindow.offsetHeight;
+		svgWindowWidth = svgWindow.offsetWidth;
 
 		button.addEventListener('click', function (e) {
-	            sight.fillContent()
-	            e.preventDefault()
-	        }, false);
+            sight.fillContent()
+            e.preventDefault()
+        }, false);
+
+		window.addEventListener('resize', function() {
+			sight.getSvgWindowValues();
+        }, false);
+
+        renderNotes(svgWindowWidth)
 	},
 
-	weightings: function (value) {
+	getValues: function (value) {
 		var value
 			= (value === 'C') ? 0
 			: (value === 'D') ? 1
@@ -20,6 +29,12 @@ sight = {
 			: 'error';
 
 		return value
+	},
+
+	getSvgWindowValues: function () {
+		var svgWindow = document.getElementById('svgWindow');
+		svgWindowHeight = svgWindow.offsetHeight;
+		svgWindowWidth = svgWindow.offsetWidth;
 	},
 
 	fillContent: function () {
@@ -61,9 +76,8 @@ sight = {
 					["C", "4"]
 					],
 
-
 			item = items[Math.floor(Math.random()*items.length)],
-			value = this.weightings(item[0]),
+			value = this.getValues(item[0]),
 			x = value*(50) + ((item[1]-4)*350);
 
 			if (x%100 === 0) {
