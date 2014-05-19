@@ -13,8 +13,7 @@ sight = {
 		window.addEventListener('resize', function() {
 			sight.getSvgWindowValues();
         }, false);
-
-        this.getSvgWindowValues()
+        sight.getSvgWindowValues();
 	},
 
 	notes: function () {
@@ -73,46 +72,62 @@ sight = {
 	},
 
 	calculateNotes: function (svgWindowWidth) {
-		var	noteStrikeThrough = document.getElementById('noteStrikeThrough'),
-			noteUnderscore = document.getElementById('noteUnderscore'),
-			noteTailUp = document.getElementById('noteTailUp'),
-			noteTailDown = document.getElementById('noteTailDown'),
+		var	notes = this.notes();
 
-			notes = this.notes()
-
-		for (var i = 0; i < 2; i++) {
+		for (var i = 0; i < 4; i++) {
 			var item = notes[Math.floor(Math.random()*notes.length)],
 				value = this.getValues(item[0]),
-				x = i,
-				y = value*(50) + ((item[1]-4)*350);
+				x = i * 150,
+				y = (value*(50) + ((item[1]-4)*350)),
+				noteType = null,
+				noteStrikeThrough = null,
+				noteUnderscore = null,
+				noteTailUp = null,
+				noteTailDown = null
 
 
-			// if (y % 100 === 0) {
-			// 	noteStrikeThrough.style.visibility="visible";
-			// 	noteUnderscore.style.visibility="hidden";
-			// } else if (y % 100 === 50) {
-			// 	noteUnderscore.style.visibility="visible";
-			// 	noteStrikeThrough.style.visibility="hidden";
-			// }
+			if (y % 100 === 0) {
+				noteStrikeThrough = true;
+				noteUnderscore = false;
+			} else if (y % 100 === 50) {
+				noteUnderscore = true;
+				noteStrikeThrough = false;
+			}
 
-			// if (y >= 400) {
-			// 	noteTailDown.style.visibility="visible"
-			// 	noteTailUp.style.visibility="hidden"
-			// } else {
-			// 	noteTailUp.style.visibility="visible"
-			// 	noteTailDown.style.visibility="hidden"
-			// }
-			this.renderNotes(x, y)
+			if (y >= 400) {
+				noteTailDown = true;
+				noteTailUp = false;
+			} else {
+				noteTailUp = true;
+				noteTailDown = false;
+			}
+
+
+			if (noteStrikeThrough && noteTailUp) {
+				noteType = '#noteStrikeThroughTailUp';
+			} else if (noteStrikeThrough && noteTailDown) {
+				noteType = '#noteStrikeThroughTailDown';
+			} else if (noteUnderscore && noteTailUp) {
+				noteType = '#noteUnderscoreTailUp';
+			} else if (noteUnderscore && noteTailDown) {
+				noteType = '#noteUnderscoreTailDown';
+			} else if (noteTailUp) {
+				noteType = '#noteTailUp';
+			} else if (noteTailDown) {
+				noteType = '#noteTailDown';
+			}
+
+			this.renderNotes(x, -y, noteType)
 		}
 
 	},
 
-	renderNotes: function (x, y) {
+	renderNotes: function (x, y, noteType) {
 		var drawArea = document.getElementById('drawArea'),
 			noteToDraw = document.createElementNS("http://www.w3.org/2000/svg", 'use');
 
-		noteToDraw.setAttribute('xlink:href', '#noteTailUp')
-		noteToDraw.setAttribute('transform', 'translate(0 0)')
+		noteToDraw.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', noteType)
+		noteToDraw.setAttributeNS(null, 'transform', 'translate(' + x + ' ' + y +')')
 
 		drawArea.appendChild(noteToDraw)
 
@@ -121,5 +136,4 @@ sight = {
 
 window.addEventListener('load', function loaded() {
         sight.loaded()
-        sight.calculateNotes()
     }, false);
