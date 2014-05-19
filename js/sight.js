@@ -73,41 +73,49 @@ sight = {
 	},
 
 	calculateNotes: function (svgWindowWidth) {
-		var note = document.getElementById('note'),
-			noteStrikeThrough = document.getElementById('noteStrikeThrough'),
+		var	noteStrikeThrough = document.getElementById('noteStrikeThrough'),
 			noteUnderscore = document.getElementById('noteUnderscore'),
 			noteTailUp = document.getElementById('noteTailUp'),
 			noteTailDown = document.getElementById('noteTailDown'),
 
 			notes = this.notes()
 
-		for (var i = 0; i < svgWindowWidth; i++) {
+		for (var i = 0; i < 2; i++) {
 			var item = notes[Math.floor(Math.random()*notes.length)],
 				value = this.getValues(item[0]),
-				x = value*(50) + ((item[1]-4)*350);
+				x = i,
+				y = value*(50) + ((item[1]-4)*350);
 
-			if (x % 100 === 0) {
-				noteStrikeThrough.style.visibility="visible";
-				noteUnderscore.style.visibility="hidden";
-			} else if (x % 100 === 50) {
-				noteUnderscore.style.visibility="visible";
-				noteStrikeThrough.style.visibility="hidden";
-			}
 
-			if (x >= 400) {
-				noteTailDown.style.visibility="visible"
-				noteTailUp.style.visibility="hidden"
-			} else {
-				noteTailUp.style.visibility="visible"
-				noteTailDown.style.visibility="hidden"
-			}
-			this.renderNotes(x)
+			// if (y % 100 === 0) {
+			// 	noteStrikeThrough.style.visibility="visible";
+			// 	noteUnderscore.style.visibility="hidden";
+			// } else if (y % 100 === 50) {
+			// 	noteUnderscore.style.visibility="visible";
+			// 	noteStrikeThrough.style.visibility="hidden";
+			// }
+
+			// if (y >= 400) {
+			// 	noteTailDown.style.visibility="visible"
+			// 	noteTailUp.style.visibility="hidden"
+			// } else {
+			// 	noteTailUp.style.visibility="visible"
+			// 	noteTailDown.style.visibility="hidden"
+			// }
+			this.renderNotes(x, y)
 		}
 
 	},
 
-	renderNotes: function (x) {
-		note.setAttribute('transform', ('translate(0,' + (-x) + ')'))
+	renderNotes: function (x, y) {
+		var drawArea = document.getElementById('drawArea'),
+			noteToDraw = document.createElementNS("http://www.w3.org/2000/svg", 'use');
+
+		noteToDraw.setAttribute('xlink:href', '#noteTailUp')
+		noteToDraw.setAttribute('transform', 'translate(0 0)')
+
+		drawArea.appendChild(noteToDraw)
+
 	}
 };
 
