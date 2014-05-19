@@ -25,7 +25,8 @@ sight = {
 	fillContent: function () {
 		var display = document.getElementById('display'),
 			note = document.getElementById('note'),
-			noteLine = document.getElementById('noteLine'),
+			noteStrikeThrough = document.getElementById('noteStrikeThrough'),
+			noteUnderscore = document.getElementById('noteUnderscore'),
 			noteTailUp = document.getElementById('noteTailUp'),
 			noteTailDown = document.getElementById('noteTailDown'),
 			items = [
@@ -66,12 +67,14 @@ sight = {
 			x = value*(50) + ((item[1]-4)*350);
 
 			if (x%100 === 0) {
-				noteLine.style.visibility="visible";
-			} else {
-				noteLine.style.visibility="hidden";
+				noteStrikeThrough.style.visibility="visible";
+				noteUnderscore.style.visibility="hidden";
+			} else if (x%100 === 50) {
+				noteUnderscore.style.visibility="visible";
+				noteStrikeThrough.style.visibility="hidden";
 			}
 
-			if (x>=400) {
+			if (x >= 400) {
 				noteTailDown.style.visibility="visible"
 				noteTailUp.style.visibility="hidden"
 			} else {
