@@ -7,6 +7,7 @@ sight = {
 			var dataToClear = document.getElementById('drawArea');
 
 			dataToClear.innerHTML = ''
+			dataToClear.innerText = ''
             sight.getSvgWindowValues()
             e.preventDefault()
         }, false);
@@ -14,7 +15,6 @@ sight = {
 		// window.addEventListener('resize', function() {
 		// 	sight.getSvgWindowValues();
   //       }, false);
-
         sight.getSvgWindowValues();
 	},
 
@@ -68,8 +68,7 @@ sight = {
 
 	getSvgWindowValues: function () {
 		var svgWindow = document.getElementById('svgWindow');
-		svgWindowHeight = svgWindow.offsetHeight;
-		svgWindowWidth = svgWindow.offsetWidth;
+		svgWindowWidth = svgWindow.getBBox().width;
 		this.calculateNotes(svgWindowWidth)
 	},
 
@@ -77,8 +76,7 @@ sight = {
 		var	notes = this.notes(),
 			svgWindow = document.getElementById('svgWindow');
 
-		svgWindowHeight = svgWindow.offsetHeight;
-		svgWindowWidth = svgWindow.offsetWidth;
+		svgWindowWidth = svgWindow.getBBox().width;
 		numberToGenerate = svgWindowWidth/60;
 
 		for (var i = 0; i < numberToGenerate; i++) {
@@ -137,7 +135,6 @@ sight = {
 		noteToDraw.setAttributeNS(null, 'transform', 'translate(' + x + ' ' + y +')')
 
 		drawArea.appendChild(noteToDraw)
-
 	}
 };
 
