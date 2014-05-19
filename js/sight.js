@@ -14,8 +14,9 @@ sight = {
         }, false);
 
 		// window.addEventListener('resize', function() {
-		// 	sight.getSvgWindowValues();
+
   //       }, false);
+
         sight.getSvgWindowValues();
 	},
 
@@ -75,32 +76,29 @@ sight = {
 
 	calculateNotes: function (svgWindowWidth) {
 		var	notes = this.notes(),
-			svgWindow = document.getElementById('svgWindow');
-
-		svgWindowWidth = svgWindow.getBBox().width;
-		numberToGenerate = svgWindowWidth/60;
+			numberToGenerate = svgWindowWidth/60;
 
 		for (var i = 0; i < numberToGenerate; i++) {
-			var item = notes[Math.floor(Math.random()*notes.length)],
-				value = this.getValues(item[0]),
-				x = i * 150,
-				y = (value*(50) + ((item[1]-4)*350)),
+			var note = notes[Math.floor(Math.random()*notes.length)],
+				value = this.getValues(note[0]),
+				x = i * 45,
+				y = (value*(15) + ((note[1]-4)*105)),
 				noteType = null,
 				noteStrikeThrough = null,
 				noteUnderscore = null,
 				noteTailUp = null,
-				noteTailDown = null
+				noteTailDown = null;
 
 
-			if (y % 100 === 0) {
+			if (y % 30 === 0) {
 				noteStrikeThrough = true;
 				noteUnderscore = false;
-			} else if (y % 100 === 50) {
+			} else if (y % 30 === 15) {
 				noteUnderscore = true;
 				noteStrikeThrough = false;
 			}
 
-			if (y >= 400) {
+			if (y >= 120) {
 				noteTailDown = true;
 				noteTailUp = false;
 			} else {
