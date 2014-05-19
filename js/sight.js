@@ -1,18 +1,17 @@
 sight = {
 	loaded: function () {
-		var button = document.getElementById('button'),
-			svgWindow = document.getElementById('svgWindow');
-		svgWindowHeight = svgWindow.offsetHeight;
-		svgWindowWidth = svgWindow.offsetWidth;
+		var button = document.getElementById('button');
+			
 
 		button.addEventListener('click', function (e) {
             sight.getSvgWindowValues()
             e.preventDefault()
         }, false);
 
-		window.addEventListener('resize', function() {
-			sight.getSvgWindowValues();
-        }, false);
+		// window.addEventListener('resize', function() {
+		// 	sight.getSvgWindowValues();
+  //       }, false);
+
         sight.getSvgWindowValues();
 	},
 
@@ -72,9 +71,14 @@ sight = {
 	},
 
 	calculateNotes: function (svgWindowWidth) {
-		var	notes = this.notes();
+		var	notes = this.notes(),
+			svgWindow = document.getElementById('svgWindow');
 
-		for (var i = 0; i < 4; i++) {
+		svgWindowHeight = svgWindow.offsetHeight;
+		svgWindowWidth = svgWindow.offsetWidth;
+		numberToGenerate = svgWindowWidth/60;
+
+		for (var i = 0; i < numberToGenerate; i++) {
 			var item = notes[Math.floor(Math.random()*notes.length)],
 				value = this.getValues(item[0]),
 				x = i * 150,
