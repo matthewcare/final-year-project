@@ -6,8 +6,9 @@ sight = {
 		button.addEventListener('click', function (e) {
 			var dataToClear = document.getElementById('drawArea');
 
-			dataToClear.innerHTML = ''
-			dataToClear.innerText = ''
+			while (dataToClear.firstChild) {
+			    dataToClear.removeChild(dataToClear.firstChild);
+			}
             sight.getSvgWindowValues()
             e.preventDefault()
         }, false);
