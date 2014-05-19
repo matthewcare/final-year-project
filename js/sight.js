@@ -4,6 +4,9 @@ sight = {
 			
 
 		button.addEventListener('click', function (e) {
+			var dataToClear = document.getElementById('drawArea');
+
+			dataToClear.innerHTML = ''
             sight.getSvgWindowValues()
             e.preventDefault()
         }, false);
