@@ -17,6 +17,40 @@ sight = {
         renderNotes(svgWindowWidth)
 	},
 
+	notes: function () {
+		return [
+				["C", "4"],
+				["D", "4"],
+				["E", "4"],
+				["F", "4"],
+				["G", "4"],
+				["A", "4"],
+				["B", "4"],
+				["C", "5"],
+				["D", "5"],
+				["E", "5"],
+				["F", "5"],
+				["G", "5"],
+				["A", "5"],
+				["B", "5"],
+				["C", "6"],
+				["B", "5"],
+				["A", "5"],
+				["G", "5"],
+				["F", "5"],
+				["E", "5"],
+				["D", "5"],
+				["C", "5"],
+				["B", "4"],
+				["A", "4"],
+				["G", "4"],
+				["F", "4"],
+				["E", "4"],
+				["D", "4"],
+				["C", "4"]
+			]
+	},
+
 	getValues: function (value) {
 		var value
 			= (value === 'C') ? 0
@@ -44,37 +78,8 @@ sight = {
 			noteUnderscore = document.getElementById('noteUnderscore'),
 			noteTailUp = document.getElementById('noteTailUp'),
 			noteTailDown = document.getElementById('noteTailDown'),
-			items = [
-					["C", "4"],
-					["D", "4"],
-					["E", "4"],
-					["F", "4"],
-					["G", "4"],
-					["A", "4"],
-					["B", "4"],
-					["C", "5"],
-					["D", "5"],
-					["E", "5"],
-					["F", "5"],
-					["G", "5"],
-					["A", "5"],
-					["B", "5"],
-					["C", "6"],
-					["B", "5"],
-					["A", "5"],
-					["G", "5"],
-					["F", "5"],
-					["E", "5"],
-					["D", "5"],
-					["C", "5"],
-					["B", "4"],
-					["A", "4"],
-					["G", "4"],
-					["F", "4"],
-					["E", "4"],
-					["D", "4"],
-					["C", "4"]
-					],
+
+			notes = notes()
 
 			item = items[Math.floor(Math.random()*items.length)],
 			value = this.getValues(item[0]),
