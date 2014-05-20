@@ -9,15 +9,15 @@ sight = {
 			while (dataToClear.firstChild) {
 			    dataToClear.removeChild(dataToClear.firstChild);
 			}
-            sight.getSvgWindowValues()
+            sight.calculateNotes()
             e.preventDefault()
         }, false);
 
-		// window.addEventListener('resize', function() {
+		window.addEventListener('resize', function() {
+			sight.checkToRemoveLastChild()
+        }, false);
 
-  //       }, false);
-
-        sight.getSvgWindowValues();
+        sight.calculateNotes();
 	},
 
 	notes: function () {
@@ -71,19 +71,35 @@ sight = {
 	getSvgWindowValues: function () {
 		var svgWindow = document.getElementById('svgWindow');
 		svgWindowWidth = svgWindow.getBBox().width;
-		this.calculateNotes(svgWindowWidth)
+		return svgWindowWidth
 	},
 
-	calculateNotes: function (svgWindowWidth) {
-		var	notes = this.notes(),
-			getBetweenNotes = 45,
+	checkToRemoveLastChild: function () {
+		var dataToClear = document.getElementById('drawArea'),
+			numberOfChildren = drawArea.childElementCount,
+			gapBetweenNotes = 45,
 			firstNoteGap = 80,
-			numberToGenerate = ((svgWindowWidth - firstNoteGap) / 45) -1;
+			svgWindowWidth = this.getSvgWindowValues();
+
+		numberToGenerate = Math.ceil((svgWindowWidth - firstNoteGap) / gapBetweenNotes) -1;
+
+		if (numberToGenerate < numberOfChildren) {
+			dataToClear.removeChild(dataToClear.lastChild);		
+		}
+
+	},
+
+	calculateNotes: function () {
+		var	notes = this.notes(),
+			gapBetweenNotes = 45,
+			firstNoteGap = 80,
+			svgWindowWidth = this.getSvgWindowValues(),
+			numberToGenerate = Math.ceil((svgWindowWidth - firstNoteGap) / gapBetweenNotes) -1;
 
 		for (var i = 0; i < numberToGenerate; i++) {
 			var note = notes[Math.floor(Math.random()*notes.length)],
 				value = this.getValues(note[0]),
-				x = i * getBetweenNotes,
+				x = i * gapBetweenNotes,
 				y = (value*(15) + ((note[1]-4)*105)),
 				noteType = null,
 				noteStrikeThrough = null,
@@ -124,7 +140,6 @@ sight = {
 
 			this.renderNotes(x, -y, noteType)
 		}
-
 	},
 
 	renderNotes: function (x, y, noteType) {
