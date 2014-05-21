@@ -1,23 +1,33 @@
 sight = {
+
+	generatedNotes: [],
+
 	loaded: function () {
-		var button = document.getElementById('button');
+		var randomiseButton = document.getElementById('randomise');
 			
 
-		button.addEventListener('click', function (e) {
-			var dataToClear = document.getElementById('drawArea');
-
-			while (dataToClear.firstChild) {
-			    dataToClear.removeChild(dataToClear.firstChild);
-			}
-            sight.calculateNotes()
-            e.preventDefault()
+		randomiseButton.addEventListener('click', function (e) {
+			sight.randomiseButtonPressed();
+            e.preventDefault();
         }, false);
 
 		window.addEventListener('resize', function() {
-			sight.checkToRemoveLastChild()
+			sight.checkToRemoveLastChild();
         }, false);
 
         sight.calculateNotes();
+	},
+
+	randomiseButtonPressed: function () {
+		var dataToClear = document.getElementById('drawArea');
+
+			while (dataToClear.firstChild) {
+			    dataToClear.removeChild(dataToClear.firstChild);
+			};
+
+			this.generatedNotes = [];
+
+            this.calculateNotes();
 	},
 
 	notes: function () {
@@ -51,37 +61,36 @@ sight = {
 				["E", "4"],
 				["D", "4"],
 				["C", "4"]
-			]
+			];
 	},
 
-	getValues: function (value) {
+	getValues: function (note) {
 		var value
-			= (value === 'C') ? 0
-			: (value === 'D') ? 1
-			: (value === 'E') ? 2
-			: (value === 'F') ? 3
-			: (value === 'G') ? 4
-			: (value === 'A') ? 5
-			: (value === 'B') ? 6
+			= (note === 'C') ? 0
+			: (note === 'D') ? 1
+			: (note === 'E') ? 2
+			: (note === 'F') ? 3
+			: (note === 'G') ? 4
+			: (note === 'A') ? 5
+			: (note === 'B') ? 6
 			: 'error';
 
-		return value
+		return value;
 	},
 
 	getSvgWindowValues: function () {
 		var svgWindow = document.getElementById('svgWindow');
 		svgWindowWidth = svgWindow.getBBox().width;
-		return svgWindowWidth
+		return svgWindowWidth;
 	},
 
 	checkToRemoveLastChild: function () {
 		var dataToClear = document.getElementById('drawArea'),
-			numberOfChildren = drawArea.childElementCount,
+			numberOfChildren = dataToClear.childElementCount,
 			gapBetweenNotes = 45,
 			firstNoteGap = 80,
-			svgWindowWidth = this.getSvgWindowValues();
-
-		numberToGenerate = Math.ceil((svgWindowWidth - firstNoteGap) / gapBetweenNotes) -1;
+			svgWindowWidth = this.getSvgWindowValues(),
+			numberToGenerate = Math.ceil((svgWindowWidth - firstNoteGap) / gapBetweenNotes) -1;
 
 		if (numberToGenerate < numberOfChildren) {
 			dataToClear.removeChild(dataToClear.lastChild);		
@@ -94,9 +103,10 @@ sight = {
 			gapBetweenNotes = 45,
 			firstNoteGap = 80,
 			svgWindowWidth = this.getSvgWindowValues(),
-			numberToGenerate = Math.ceil((svgWindowWidth - firstNoteGap) / gapBetweenNotes) -1;
+			numberToGenerate = Math.ceil((svgWindowWidth - firstNoteGap) / gapBetweenNotes) -1,
+			i = 0;
 
-		for (var i = 0; i < numberToGenerate; i++) {
+		for (i; i < numberToGenerate; i++) {
 			var note = notes[Math.floor(Math.random()*notes.length)],
 				value = this.getValues(note[0]),
 				x = i * gapBetweenNotes,
@@ -107,6 +117,8 @@ sight = {
 				noteTailUp = null,
 				noteTailDown = null;
 
+			this.generatedNotes.push(note[0]);
+			
 
 			if (y % 30 === 0) {
 				noteStrikeThrough = true;
@@ -138,21 +150,22 @@ sight = {
 				noteType = '#noteTailDown';
 			}
 
-			this.renderNotes(x, -y, noteType)
-		}
+			this.renderNotes(x, -y, noteType);
+		};
+		console.log(this.generatedNotes);
 	},
 
 	renderNotes: function (x, y, noteType) {
 		var drawArea = document.getElementById('drawArea'),
 			noteToDraw = document.createElementNS("http://www.w3.org/2000/svg", 'use');
 
-		noteToDraw.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', noteType)
-		noteToDraw.setAttributeNS(null, 'transform', 'translate(' + x + ' ' + y +')')
+		noteToDraw.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', noteType);
+		noteToDraw.setAttributeNS(null, 'transform', 'translate(' + x + ' ' + y +')');
 
-		drawArea.appendChild(noteToDraw)
+		drawArea.appendChild(noteToDraw);
 	}
 };
 
 window.addEventListener('load', function loaded() {
-        sight.loaded()
+        sight.loaded();
     }, false);
