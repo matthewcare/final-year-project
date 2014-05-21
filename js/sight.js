@@ -1,6 +1,9 @@
 sight = {
 
 	generatedNotes: [],
+	userInputArray: [],
+	currentCharacter: 0,
+	incorrect: null,
 
 	loaded: function () {
 		var randomiseButton = document.getElementById('randomise');
@@ -11,11 +14,18 @@ sight = {
             e.preventDefault();
         }, false);
 
+        liveInputToggleBtn.addEventListener('click', function (e) {
+            stream.startMedia('tuner');
+            liveInputToggleBtn.value = "Running";
+            e.preventDefault();
+        }, false);
+
 		window.addEventListener('resize', function() {
 			sight.checkToRemoveLastChild();
         }, false);
 
-        sight.calculateNotes();
+		this.addEventListenerByClass();
+        this.calculateNotes();
 	},
 
 	randomiseButtonPressed: function () {
@@ -26,9 +36,49 @@ sight = {
 			};
 
 			this.generatedNotes = [];
+			this.userInputArray = [];
 
             this.calculateNotes();
 	},
+
+	addEventListenerByClass: function () {
+        var list = document.getElementsByClassName('noteInputButton'),
+            length = list.length,
+            i = 0;
+
+        for (i = 0, length; i < length; i++) {
+            list[i].addEventListener('click', function (e) {
+                sight.userInputArray.push(this.innerHTML);
+                sight.compareArrays();
+                e.preventDefault();
+            }, false);
+        };
+	},
+
+	compareArrays: function () {
+        var userInputArrayLength = (this.userInputArray.length) - 1,
+            output = document.getElementById('outputParagraph');
+
+        if (sight.generatedNotes === null) {
+            output.innerHTML = ("You must select a scale");
+            this.userInputArray = [];
+        } else if (this.userInputArray[userInputArrayLength] === sight.generatedNotes[userInputArrayLength] && this.currentCharacter === (sight.generatedNotes.length - 1)) {
+            //document.getElementById('currentScale').innerHTML = "Correct, pick a new scale";
+            this.currentCharacter = 0;
+            this.userInputArray = [];
+            this.incorrect = true;
+        } else if (this.userInputArray[userInputArrayLength] === sight.generatedNotes[userInputArrayLength]) {
+            //document.getElementById(this.currentCharacter).id = "correct";
+            this.currentCharacter = this.currentCharacter + 1;
+            this.incorrect = false;
+        } else {
+            //document.getElementById(this.currentCharacter).id = "incorrect";
+            this.currentCharacter = 0;
+            this.userInputArray = [];
+            this.incorrect = true;
+        }
+        console.log(this.incorrect)
+    },
 
 	notes: function () {
 		return [
@@ -152,7 +202,6 @@ sight = {
 
 			this.renderNotes(x, -y, noteType);
 		};
-		console.log(this.generatedNotes);
 	},
 
 	renderNotes: function (x, y, noteType) {
