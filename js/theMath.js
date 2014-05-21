@@ -3,6 +3,8 @@ var theMath = {
 	// Variables
     modeValue: null,
     NOTES: ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
+    userInputArray: [],
+    currentCharacter: 0,
 
     // Returns the note number
 	noteFromFrequency: function (frequency) {
@@ -29,6 +31,26 @@ var theMath = {
         noteFrequency = this.frequencyFromNote(noteNumber)
         cents = Math.floor(Math.log(frequency / noteFrequency) / Math.log(2) * 1200);
         return cents;
+    },
+
+    // Compares the input array against the 'known correct' array
+    // Updates the display accordingly
+    compareArrays: function (note, noteArray) {
+        this.userInputArray.push(note);
+        var userInputArrayLength = (this.userInputArray.length) - 1;
+
+        if (this.userInputArray[userInputArrayLength] === noteArray[userInputArrayLength] && this.currentCharacter === (noteArray.length - 1)) {
+            this.currentCharacter = 0;
+            this.userInputArray = [];
+            return ['complete', this.currentCharacter]
+        } else if (this.userInputArray[userInputArrayLength] === noteArray[userInputArrayLength]) {
+            this.currentCharacter = this.currentCharacter + 1;
+            return ['correct', this.currentCharacter]
+        } else {
+            this.currentCharacter = 0;
+            this.userInputArray = [];
+            return ['incorrect', this.currentCharacter]
+        }
     },
 
     // Calculates the modal value of the analyser's data store

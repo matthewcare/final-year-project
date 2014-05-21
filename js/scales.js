@@ -2,9 +2,6 @@ var scales = {
 
     // Variables
     activeScale: null,
-    currentCharacter: 0,
-    incorrect: false,
-    userInputArray: [],
 
     // Constants
     gradeOne: {
@@ -18,41 +15,27 @@ var scales = {
 
     // Takes the user input note and adds it to an array to be compared
     updateScaleDisplay: function (frequency) {
-        var note =  theMath.noteString(frequency),
+        var notePressed =  theMath.noteString(frequency),
             currentScaleText = document.getElementById('currentScale');
 
+        // Add a reset button that uses this
         if (this.incorrect) {
             currentScaleText.innerHTML = scalesToString.returned();
         }
 
         this.userInputArray.push(note);
-        this.compareArrays();
-    },
+        compareArrays = theMath.compareArrays(notePressed, this.noteArray);
+        correct = compareArrays[0];
+        currentCharacter = compareArrays[1]
 
-    // Compares the input array against the 'known correct' array
-    // Updates the display accordingly
-    compareArrays: function () {
-        var userInputArrayLength = (this.userInputArray.length) - 1,
-            output = document.getElementById('outputParagraph');
 
-        if (scales.activeScale === null) {
-            output.innerHTML = ("You must select a scale");
-            this.userInputArray = [];
-        } else if (this.userInputArray[userInputArrayLength] === scales.activeScale[userInputArrayLength] && this.currentCharacter === (scales.activeScale.length - 1)) {
+        if (correct === 'complete') {
             document.getElementById('currentScale').innerHTML = "Correct, pick a new scale";
-            this.currentCharacter = 0;
-            this.userInputArray = [];
-            this.incorrect = true;
-        } else if (this.userInputArray[userInputArrayLength] === scales.activeScale[userInputArrayLength]) {
+        } else if (correct === 'correct') {
             document.getElementById(this.currentCharacter).id = "correct";
-            this.currentCharacter = this.currentCharacter + 1;
-            this.incorrect = false;
-        } else {
+        } else if (correct === 'incorrect') {
             document.getElementById(this.currentCharacter).id = "incorrect";
-            this.currentCharacter = 0;
-            this.userInputArray = [];
-            this.incorrect = true;
-        }
+        };
     }
 };
 
