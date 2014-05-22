@@ -38,35 +38,14 @@ var sight = {
             this.calculateNotes();
 	},
 
-	noteInputButtonPressed: function (notePressed) {
-		var compareArrays = theMath.compareArrays(notePressed, this.noteArray),
-			correct = compareArrays[0],
-			currentCharacter = compareArrays[1],
-			percentageCorrect = compareArrays [2],
-			element = document.getElementById(currentCharacter);
-
-        if (correct === 'completeCorrect') {
-			element.setAttribute('class', 'correct');
-			this.displayResults(percentageCorrect);
-        } else if (correct === 'completeIncorrect') {
-        	element.setAttribute('class', 'incorrect');
-			this.displayResults(percentageCorrect);
-        } else if (correct === 'correct') {
-			element.setAttribute('class', 'correct');
-        } else if (correct === 'incorrect') {
-			element.setAttribute('class', 'incorrect');
-        };
-	},
-
 	displayResults: function (percentageCorrect) {
 		var display = document.getElementById('results');
         theMath.resetArrays();
 		display.innerHTML = 'You got ' + percentageCorrect + '% correct.'
 	},
 
-	updateSightDisplay: function (frequency) {
-        var notePressed =  theMath.noteString(frequency),
-	        compareArrays = theMath.compareArrays(notePressed, this.noteArray),
+	updateSightDisplay: function (note) {
+        var compareArrays = theMath.compareArrays(note, this.noteArray),
 	        correct = compareArrays[0],
 			currentCharacter = compareArrays[1],
 			percentageCorrect = compareArrays [2],
@@ -92,7 +71,7 @@ var sight = {
 
         for (i = 0, length; i < length; i++) {
             list[i].addEventListener('click', function (e) {
-            	sight.noteInputButtonPressed(this.innerHTML);
+            	sight.updateSightDisplay(this.innerHTML);
                 e.preventDefault();
             }, false);
         }

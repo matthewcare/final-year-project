@@ -1,7 +1,6 @@
 var theMath = {
 
 	// Variables
-    modeValue: null,
     NOTES: ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
     userInputArray: [],
     currentCharacter: 0,
@@ -75,14 +74,16 @@ var theMath = {
     mode: function (values) {
         var frequency = {},
             v = null,          // array of frequencies
-            max = null;        // most frequent frequency
+            max = null,
+            modeValue;        // most frequent frequency
 
         for (v in values) {
             frequency[values[v]] = (frequency[values[v]] || 0) + 1;
             if (frequency[values[v]] > max) {
                 max = frequency[values[v]];
-                this.modeValue = values[v];
+                modeValue = values[v];
             }
         }
+        return modeValue;
     }
 };

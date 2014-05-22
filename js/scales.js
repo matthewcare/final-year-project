@@ -14,10 +14,9 @@ var scales = {
     },
 
     // Takes the user input note and adds it to an array to be compared
-    updateScaleDisplay: function (frequency) {
-        var notePressed =  theMath.noteString(frequency),
-            currentScaleText = document.getElementById('currentScale'),
-            compareArrays = theMath.compareArrays(notePressed, this.noteArray),
+    updateScaleDisplay: function (note) {
+        var currentScaleText = document.getElementById('currentScale'),
+            compareArrays = theMath.compareArrays(note, this.noteArray),
             correct = compareArrays[0],
             currentCharacter = compareArrays[1],
             percentageCorrect = compareArrays [2];

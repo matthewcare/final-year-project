@@ -97,14 +97,15 @@ var analyser = {
     dataStore: function (frequency) {
         var progressBar = document.getElementById('progressBar');
         if (this.frequencyArray.length >= progressBar.max && frequency === 0) {
-            theMath.mode(this.frequencyArray);
+            modeValue = theMath.mode(this.frequencyArray);
+            note = theMath.modeValue
 
             if (stream.task === 'scales') {
-                scales.updateScaleDisplay(theMath.modeValue);
+                scales.updateScaleDisplay(note);
             } else if (stream.task === 'tuner') {
-                tuner.updateTunerDisplay(theMath.modeValue);
+                tuner.updateTunerDisplay(modeValue);
             } else if (stream.task === 'sight') {
-                sight.updateSightDisplay(theMath.modeValue);
+                sight.updateSightDisplay(note);
             }
 
             this.frequencyArray.length = 0;
