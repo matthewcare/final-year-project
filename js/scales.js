@@ -10,31 +10,37 @@ var scales = {
         DMAJOR:                 ["D", "E", "F#", "G", "A", "B", "C#", "D", "E", "F#", "G", "A", "B", "C#", "D", "C#", "B", "A", "G", "F#", "E", "D", "C#", "B", "A", "G", "F#", "E", "D"],
 
         AMINORHARMONIC:         ["A", "B", "C", "D", "E", "F", "G#", "A", "B", "C", "D", "E", "F", "G#", "A", "G#", "F", "E", "D", "C", "B", "A", "G#", "F", "E", "D", "C", "B", "A"],
-        DMINORHARMONIC:         ["D", "E", "F", "G", "A", "B", "C#", "D", "E", "F", "G", "A", "B", "C#", "D", "C#", "B", "A", "G", "F", "E", "D", "C#", "B", "A", "G", "F", "E", "D"],
+        DMINORHARMONIC:         ["D", "E", "F", "G", "A", "B", "C#", "D", "E", "F", "G", "A", "B", "C#", "D", "C#", "B", "A", "G", "F", "E", "D", "C#", "B", "A", "G", "F", "E", "D"]
     },
 
     // Takes the user input note and adds it to an array to be compared
     updateScaleDisplay: function (frequency) {
         var notePressed =  theMath.noteString(frequency),
-            currentScaleText = document.getElementById('currentScale');
+            currentScaleText = document.getElementById('currentScale'),
+            compareArrays = theMath.compareArrays(notePressed, this.noteArray),
+            correct = compareArrays[0],
+            currentCharacter = compareArrays[1],
+            percentageCorrect = compareArrays [2];
 
-        // Add a reset button that uses this
-        if (this.incorrect) {
-            currentScaleText.innerHTML = scalesToString.returned();
-        }
-
-        compareArrays = theMath.compareArrays(notePressed, this.noteArray);
-        correct = compareArrays[0];
-        currentCharacter = compareArrays[1]
+        // Add a reset button that uses this?
+        // if (this.incorrect) {
+        //     currentScaleText.innerHTML = scalesToString.returned();
+        // }
 
 
-        if (correct === 'complete') {
-            document.getElementById('currentScale').innerHTML = "Correct, pick a new scale";
+        if (correct === 'completeCorrect') {
+            document.getElementById(currentCharacter).setAttribute('class', 'correct');
+            theMath.resetArrays();
+            // this.displayResults(percentageCorrect);
+        } else if (correct === 'completeIncorrect') {
+            document.getElementById(currentCharacter).setAttribute('class', 'incorrect');
+            theMath.resetArrays();
+            // this.displayResults(percentageCorrect);
         } else if (correct === 'correct') {
-            document.getElementById(this.currentCharacter).id = "correct";
+            document.getElementById(currentCharacter).setAttribute('class', 'correct');
         } else if (correct === 'incorrect') {
-            document.getElementById(this.currentCharacter).id = "incorrect";
-        };
+            document.getElementById(currentCharacter).setAttribute('class', 'incorrect');
+        }
     }
 };
 
@@ -42,9 +48,9 @@ var scales = {
 // so that its ID can be manipulated later on
 var scalesToString = {
     returned: function () {
-        var spanId = 0;
+        var spanId = 0,
+            locationText = scales.activeScale.toString().replace(/,/g, ' ');
 
-        locationText = scales.activeScale.toString().replace(/,/g, ' ');
         locationText = locationText.replace(/\S+/g, function (a) { return "<span id=" + (spanId++) + ">" + a + "</span>"; });
         return locationText;
     }
@@ -55,25 +61,24 @@ var scalesToString = {
 // button click
 (function () {
 
-    var location = document.getElementById('currentScale'),
-
-        addEventListenerByClass = function () {
-            var list = document.getElementsByClassName('scales'),
-                length = list.length,
-                i = 0;
-            for (i = 0, length; i < length; i++) {
-                list[i].addEventListener('click', function (e) {
-                    scales.activeScale = scales.gradeOne[this.id];
-                    location.innerHTML = scalesToString.returned(scales.activeScale);
-                    analyser.userInputArray = [];
-                    scales.currentCharacter = 0;
-                    if (stream.analyser === null) {
-                        stream.startMedia('scales');
-                    };
-                    e.preventDefault();
-                }, false);
-            };
-        };
+    addEventListenerByClass = function () {
+        var list = document.getElementsByClassName('scales'),
+            location = document.getElementById('currentScale'),
+            length = list.length,
+            i = 0;
+        for (i = 0, length; i < length; i++) {
+            list[i].addEventListener('click', function (e) {
+                scales.activeScale = scales.gradeOne[this.id];
+                location.innerHTML = scalesToString.returned(scales.activeScale);
+                analyser.userInputArray = [];
+                scales.currentCharacter = 0;
+                if (stream.analyser === null) {
+                    stream.startMedia('scales');
+                }
+                e.preventDefault();
+            }, false);
+        }
+    };
 
     window.addEventListener('load', function loaded() {
         addEventListenerByClass();

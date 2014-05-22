@@ -8,11 +8,11 @@
 	text-align: center;
 }
 
-#correct {
+.correct {
 	color: #7FFF00;
 }
 
-#incorrect {
+.incorrect {
 	color: red;
 }
 

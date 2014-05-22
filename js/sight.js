@@ -1,4 +1,4 @@
-sight = {
+var sight = {
 
 	noteArray: [],
 
@@ -30,7 +30,7 @@ sight = {
 
 			while (dataToClear.firstChild) {
 			    dataToClear.removeChild(dataToClear.firstChild);
-			};
+			}
 
 			this.noteArray = [];
 			theMath.resetArrays();
@@ -39,37 +39,36 @@ sight = {
 	},
 
 	noteInputButtonPressed: function (notePressed) {
-		compareArrays = theMath.compareArrays(notePressed, this.noteArray);
-		correct = compareArrays[0];
-		currentCharacter = compareArrays[1]
-		percentageCorrect = compareArrays [2]
+		var compareArrays = theMath.compareArrays(notePressed, this.noteArray),
+			correct = compareArrays[0],
+			currentCharacter = compareArrays[1],
+			percentageCorrect = compareArrays [2],
+			element = document.getElementById(currentCharacter);
 
         if (correct === 'completeCorrect') {
-			document.getElementById(currentCharacter).setAttribute('class', 'correct')
-			theMath.resetArrays();
+			element.setAttribute('class', 'correct');
 			this.displayResults(percentageCorrect);
         } else if (correct === 'completeIncorrect') {
-        	document.getElementById(currentCharacter).setAttribute('class', 'incorrect')
-        	theMath.resetArrays();
+        	element.setAttribute('class', 'incorrect');
 			this.displayResults(percentageCorrect);
         } else if (correct === 'correct') {
-			document.getElementById(currentCharacter).setAttribute('class', 'correct')
+			element.setAttribute('class', 'correct');
         } else if (correct === 'incorrect') {
-			document.getElementById(currentCharacter).setAttribute('class', 'incorrect')
+			element.setAttribute('class', 'incorrect');
         };
 	},
 
 	displayResults: function (percentageCorrect) {
 		var display = document.getElementById('results');
+        theMath.resetArrays();
 		display.innerHTML = 'You got ' + percentageCorrect + '% correct.'
 	},
 
 	updateSightDisplay: function (frequency) {
-        var notePressed =  theMath.noteString(frequency);
-
-        compareArrays = theMath.compareArrays(notePressed, this.noteArray);
-        correct = compareArrays[0];
-        currentCharacter = compareArrays[1]
+        var notePressed =  theMath.noteString(frequency),
+	        compareArrays = theMath.compareArrays(notePressed, this.noteArray),
+	        correct = compareArrays[0],
+	        currentCharacter = compareArrays[1];
 
 
         if (correct === 'complete') {
@@ -78,7 +77,7 @@ sight = {
             document.getElementById(this.currentCharacter).id = "correct";
         } else if (correct === 'incorrect') {
             document.getElementById(this.currentCharacter).id = "incorrect";
-        };
+        }
 	},
 
 	addEventListenerByClass: function () {
@@ -91,7 +90,7 @@ sight = {
             	sight.noteInputButtonPressed(this.innerHTML);
                 e.preventDefault();
             }, false);
-        };
+        }
 	},
 
 	notes: function () {
@@ -143,8 +142,8 @@ sight = {
 	},
 
 	getSvgWindowValues: function () {
-		var svgWindow = document.getElementById('svgWindow');
-		svgWindowWidth = svgWindow.getBBox().width;
+		var svgWindow = document.getElementById('svgWindow'),
+			svgWindowWidth = svgWindow.getBBox().width;
 		return svgWindowWidth;
 	},
 
@@ -214,7 +213,7 @@ sight = {
 			}
 
 			this.renderNotes(x, -y, noteType, i);
-		};
+		}
 	},
 
 	renderNotes: function (x, y, noteType, i) {
