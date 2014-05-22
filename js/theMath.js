@@ -5,6 +5,8 @@ var theMath = {
     NOTES: ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
     userInputArray: [],
     currentCharacter: 0,
+    numberCorrect: 0,
+    numberIncorrect: 0,
 
     // Returns the note number
 	noteFromFrequency: function (frequency) {
@@ -40,14 +42,20 @@ var theMath = {
         var userInputArrayLength = (this.userInputArray.length) - 1;
 
         if (this.userInputArray[userInputArrayLength] === noteArray[userInputArrayLength] && this.currentCharacter === (noteArray.length - 1)) {
-            return ['completeCorrect', (this.currentCharacter)]
+            this.numberCorrect = this.numberCorrect + 1;
+            percentageCorrect = (this.numberCorrect / noteArray.length) * 100;
+            return ['completeCorrect', this.currentCharacter, percentageCorrect]
         } else if (this.currentCharacter === (noteArray.length - 1)) {
-            return ['completeIncorrect', (this.currentCharacter)]
+            this.numberIncorrect = this.numberIncorrect + 1;
+            percentageCorrect = (this.numberCorrect / noteArray.length) * 100;
+            return ['completeIncorrect', this.currentCharacter, percentageCorrect]
         } else if (this.userInputArray[userInputArrayLength] === noteArray[userInputArrayLength]) {
             this.currentCharacter = this.currentCharacter + 1;
+            this.numberCorrect = this.numberCorrect + 1;
             return ['correct', (this.currentCharacter - 1)]
         } else {
             this.currentCharacter = this.currentCharacter + 1;
+            this.numberIncorrect = this.numberIncorrect + 1;
             return ['incorrect', (this.currentCharacter - 1)]
         }
     },

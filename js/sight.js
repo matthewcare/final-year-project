@@ -42,18 +42,26 @@ sight = {
 		compareArrays = theMath.compareArrays(notePressed, this.noteArray);
 		correct = compareArrays[0];
 		currentCharacter = compareArrays[1]
+		percentageCorrect = compareArrays [2]
 
         if (correct === 'completeCorrect') {
 			document.getElementById(currentCharacter).setAttribute('class', 'correct')
 			theMath.resetArrays();
+			this.displayResults(percentageCorrect);
         } else if (correct === 'completeIncorrect') {
         	document.getElementById(currentCharacter).setAttribute('class', 'incorrect')
         	theMath.resetArrays();
+			this.displayResults(percentageCorrect);
         } else if (correct === 'correct') {
 			document.getElementById(currentCharacter).setAttribute('class', 'correct')
         } else if (correct === 'incorrect') {
 			document.getElementById(currentCharacter).setAttribute('class', 'incorrect')
         };
+	},
+
+	displayResults: function (percentageCorrect) {
+		var display = document.getElementById('results');
+		display.innerHTML = 'You got ' + percentageCorrect + '% correct.'
 	},
 
 	updateSightDisplay: function (frequency) {
