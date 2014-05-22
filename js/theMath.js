@@ -45,12 +45,17 @@ var theMath = {
             return ['complete', this.currentCharacter]
         } else if (this.userInputArray[userInputArrayLength] === noteArray[userInputArrayLength]) {
             this.currentCharacter = this.currentCharacter + 1;
-            return ['correct', this.currentCharacter]
+            return ['correct', (this.currentCharacter - 1)]
         } else {
             this.currentCharacter = 0;
             this.userInputArray = [];
             return ['incorrect', this.currentCharacter]
         }
+    },
+
+    resetArrays: function () {
+        this.currentCharacter = 0;
+        this.userInputArray = [];        
     },
 
     // Calculates the modal value of the analyser's data store

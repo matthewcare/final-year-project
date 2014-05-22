@@ -103,6 +103,8 @@ var analyser = {
                 scales.updateScaleDisplay(theMath.modeValue);
             } else if (stream.task === 'tuner') {
                 tuner.updateTunerDisplay(theMath.modeValue);
+            } else if (stream.task === 'sight') {
+                sight.updateSightDisplay(theMath.modeValue);
             }
 
             this.frequencyArray.length = 0;

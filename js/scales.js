@@ -23,7 +23,6 @@ var scales = {
             currentScaleText.innerHTML = scalesToString.returned();
         }
 
-        this.userInputArray.push(note);
         compareArrays = theMath.compareArrays(notePressed, this.noteArray);
         correct = compareArrays[0];
         currentCharacter = compareArrays[1]

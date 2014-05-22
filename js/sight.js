@@ -1,8 +1,6 @@
 sight = {
 
 	noteArray: [],
-	currentCharacter: 0,
-	incorrect: null,
 
 	loaded: function () {
 		var randomiseButton = document.getElementById('randomise');
@@ -14,7 +12,7 @@ sight = {
         }, false);
 
         liveInputToggleBtn.addEventListener('click', function (e) {
-            stream.startMedia('tuner');
+            stream.startMedia('sight');
             liveInputToggleBtn.value = "Running";
             e.preventDefault();
         }, false);
@@ -35,7 +33,7 @@ sight = {
 			};
 
 			this.noteArray = [];
-			this.userInputArray = [];
+			theMath.resetArrays();
 
             this.calculateNotes();
 	},
@@ -44,6 +42,24 @@ sight = {
 		compareArrays = theMath.compareArrays(notePressed, this.noteArray);
 		correct = compareArrays[0];
 		currentCharacter = compareArrays[1]
+		document.getElementById(currentCharacter).setAttribute('class', 'correct')
+	},
+
+	updateSightDisplay: function (frequency) {
+        var notePressed =  theMath.noteString(frequency);
+
+        compareArrays = theMath.compareArrays(notePressed, this.noteArray);
+        correct = compareArrays[0];
+        currentCharacter = compareArrays[1]
+
+
+        if (correct === 'complete') {
+            document.getElementById('currentScale').innerHTML = "Correct, pick a new scale";
+        } else if (correct === 'correct') {
+            document.getElementById(this.currentCharacter).id = "correct";
+        } else if (correct === 'incorrect') {
+            document.getElementById(this.currentCharacter).id = "incorrect";
+        };
 	},
 
 	addEventListenerByClass: function () {
@@ -178,16 +194,19 @@ sight = {
 				noteType = '#noteTailDown';
 			}
 
-			this.renderNotes(x, -y, noteType);
+			this.renderNotes(x, -y, noteType, i);
 		};
 	},
 
-	renderNotes: function (x, y, noteType) {
+	renderNotes: function (x, y, noteType, i) {
 		var drawArea = document.getElementById('drawArea'),
 			noteToDraw = document.createElementNS("http://www.w3.org/2000/svg", 'use');
 
 		noteToDraw.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', noteType);
-		noteToDraw.setAttributeNS(null, 'transform', 'translate(' + x + ' ' + y +')');
+		noteToDraw.setAttribute('transform', 'translate(' + x + ' ' + y +')');
+		noteToDraw.setAttribute('fill', 'black');
+		noteToDraw.setAttribute('stroke', 'black');
+		noteToDraw.setAttribute('id', i);
 
 		drawArea.appendChild(noteToDraw);
 	}
