@@ -7,3 +7,8 @@
 	fill: green;
 	stroke: green;
 }
+
+.incorrect {
+	fill: red;
+	stroke: red;
+}

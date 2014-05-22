@@ -40,16 +40,15 @@ var theMath = {
         var userInputArrayLength = (this.userInputArray.length) - 1;
 
         if (this.userInputArray[userInputArrayLength] === noteArray[userInputArrayLength] && this.currentCharacter === (noteArray.length - 1)) {
-            this.currentCharacter = 0;
-            this.userInputArray = [];
-            return ['complete', this.currentCharacter]
+            return ['completeCorrect', (this.currentCharacter)]
+        } else if (this.currentCharacter === (noteArray.length - 1)) {
+            return ['completeIncorrect', (this.currentCharacter)]
         } else if (this.userInputArray[userInputArrayLength] === noteArray[userInputArrayLength]) {
             this.currentCharacter = this.currentCharacter + 1;
             return ['correct', (this.currentCharacter - 1)]
         } else {
-            this.currentCharacter = 0;
-            this.userInputArray = [];
-            return ['incorrect', this.currentCharacter]
+            this.currentCharacter = this.currentCharacter + 1;
+            return ['incorrect', (this.currentCharacter - 1)]
         }
     },
 

@@ -42,7 +42,18 @@ sight = {
 		compareArrays = theMath.compareArrays(notePressed, this.noteArray);
 		correct = compareArrays[0];
 		currentCharacter = compareArrays[1]
-		document.getElementById(currentCharacter).setAttribute('class', 'correct')
+
+        if (correct === 'completeCorrect') {
+			document.getElementById(currentCharacter).setAttribute('class', 'correct')
+			theMath.resetArrays();
+        } else if (correct === 'completeIncorrect') {
+        	document.getElementById(currentCharacter).setAttribute('class', 'incorrect')
+        	theMath.resetArrays();
+        } else if (correct === 'correct') {
+			document.getElementById(currentCharacter).setAttribute('class', 'correct')
+        } else if (correct === 'incorrect') {
+			document.getElementById(currentCharacter).setAttribute('class', 'incorrect')
+        };
 	},
 
 	updateSightDisplay: function (frequency) {
