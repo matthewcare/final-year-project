@@ -3,11 +3,11 @@ var sight = {
 	noteArray: [],
 
 	loaded: function () {
-		var randomiseButton = document.getElementById('randomise');
+		var randomiseButton = document.getElementById('reset');
 			
 
 		randomiseButton.addEventListener('click', function (e) {
-			sight.randomiseButtonPressed();
+			sight.resetButtonPressed();
             e.preventDefault();
         }, false);
 
@@ -25,7 +25,7 @@ var sight = {
         this.calculateNotes();
 	},
 
-	randomiseButtonPressed: function () {
+	resetButtonPressed: function () {
 		var dataToClear = document.getElementById('drawArea');
 
 			while (dataToClear.firstChild) {
@@ -69,7 +69,6 @@ var sight = {
 	        compareArrays = theMath.compareArrays(notePressed, this.noteArray),
 	        correct = compareArrays[0],
 	        currentCharacter = compareArrays[1];
-
 
         if (correct === 'complete') {
             document.getElementById('currentScale').innerHTML = "Correct, pick a new scale";

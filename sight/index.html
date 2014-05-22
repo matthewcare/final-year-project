@@ -14,28 +14,28 @@
 				<svg id="svgWindow">
 					<defs>
 						<g id="noteTailUp">
-							<ellipse rx="17.4" ry="11.61" transform="translate(80 230) rotate(-27)"/>
 							<line x1="94" y1="225.9" x2="94" y2="165" stroke-width="4.5" />
+							<ellipse rx="17.4" ry="11.61" transform="translate(80 230) rotate(-27)"/>
 						</g>
 						<g id="noteTailDown">
-							<ellipse rx="17.4" ry="11.61" transform="translate(80 230) rotate(-27)"/>
 							<line x1="66" y1="233.1" x2="66" y2="294" stroke-width="4.5" />
+							<ellipse rx="17.4" ry="11.61" transform="translate(80 230) rotate(-27)"/>
 						</g>
 						<g id="noteStrikeThroughTailUp">
-							<use xlink:href="#noteTailUp" />
 							<line x1="58.5" y1="230" x2="103.5" y2="230" stroke-width="4.5"/>
+							<use xlink:href="#noteTailUp" />
 						</g>
 						<g id="noteStrikeThroughTailDown">
-							<use xlink:href="#noteTailDown" />
 							<line x1="58.5" y1="230" x2="103.5" y2="230" stroke-width="4.5"/>
+							<use xlink:href="#noteTailDown" />
 						</g>
 						<g id="noteUnderscoreTailUp">
-							<use xlink:href="#noteTailUp" />
 							<line x1="58.5" y1="245" x2="103.5" y2="245" stroke-width="4.5"/>
+							<use xlink:href="#noteTailUp" />
 						</g>
 						<g id="noteUnderscoreTailDown">
-							<use xlink:href="#noteTailDown" />
 							<line x1="58.5" y1="245" x2="103.5" y2="245" stroke-width="4.5"/>
+							<use xlink:href="#noteTailDown" />
 						</g>
 					</defs>
 
@@ -53,7 +53,7 @@
 
 				</svg>
  
- 				<button id="randomise">Randomise</button>
+ 				<button id="reset">Reset</button>
  				<button class="noteInputButton">C</button>
  				<button class="noteInputButton">D</button>
  				<button class="noteInputButton">E</button>
@@ -62,6 +62,7 @@
  				<button class="noteInputButton">A</button>
  				<button class="noteInputButton">B</button>
  				<p id="results">Results here</p>
+ 				<progress value="0" max="50" id="progressBar"></progress>
  				<button id="liveInputToggleBtn">Start</button>
 
 
