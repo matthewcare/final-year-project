@@ -68,15 +68,21 @@ var sight = {
         var notePressed =  theMath.noteString(frequency),
 	        compareArrays = theMath.compareArrays(notePressed, this.noteArray),
 	        correct = compareArrays[0],
-	        currentCharacter = compareArrays[1];
+			currentCharacter = compareArrays[1],
+			percentageCorrect = compareArrays [2],
+			element = document.getElementById(currentCharacter);
 
-        if (correct === 'complete') {
-            document.getElementById('currentScale').innerHTML = "Correct, pick a new scale";
+        if (correct === 'completeCorrect') {
+			element.setAttribute('class', 'correct');
+			this.displayResults(percentageCorrect);
+        } else if (correct === 'completeIncorrect') {
+        	element.setAttribute('class', 'incorrect');
+			this.displayResults(percentageCorrect);
         } else if (correct === 'correct') {
-            document.getElementById(this.currentCharacter).id = "correct";
+			element.setAttribute('class', 'correct');
         } else if (correct === 'incorrect') {
-            document.getElementById(this.currentCharacter).id = "incorrect";
-        }
+			element.setAttribute('class', 'incorrect');
+        };
 	},
 
 	addEventListenerByClass: function () {
