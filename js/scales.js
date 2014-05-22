@@ -26,7 +26,6 @@ var scales = {
         //     currentScaleText.innerHTML = scalesToString.returned();
         // }
 
-
         if (correct === 'completeCorrect') {
             document.getElementById(currentCharacter).setAttribute('class', 'correct');
             theMath.resetArrays();

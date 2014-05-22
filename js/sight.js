@@ -166,10 +166,10 @@ var sight = {
 
 			this.noteArray.push(note[0]);
 			
-			if (y % 30 === 0) {
+			if ((y % 30 === 0 && y > 150) || (y % 30 === 0 && y < 30)) {
 				noteStrikeThrough = true;
 				noteUnderscore = false;
-			} else if (y % 30 === 15) {
+			} else if ((y % 30 === 15 && y > 165) || (y % 30 === 0 && y < 15)) {
 				noteUnderscore = true;
 				noteStrikeThrough = false;
 			}
