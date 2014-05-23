@@ -43,12 +43,12 @@ var theMath = {
 
         if (this.userInputArray[userInputArrayLength] === noteArray[userInputArrayLength] && this.currentCharacter === (noteArray.length - 1)) {
             this.numberCorrect = this.numberCorrect + 1;
-            percentageCorrect = (this.numberCorrect / noteArray.length) * 100;
+            percentageCorrect = Math.round((this.numberCorrect / noteArray.length) * 100);
             return ['completeCorrect', this.currentCharacter, percentageCorrect];
         }
         if (this.currentCharacter === (noteArray.length - 1)) {
             this.numberIncorrect = this.numberIncorrect + 1;
-            percentageCorrect = (this.numberCorrect / noteArray.length) * 100;
+            percentageCorrect = Math.round((this.numberCorrect / noteArray.length) * 100);
             return ['completeIncorrect', this.currentCharacter, percentageCorrect];
         }
         if (this.userInputArray[userInputArrayLength] === noteArray[userInputArrayLength]) {
