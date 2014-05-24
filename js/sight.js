@@ -5,7 +5,6 @@ var sight = {
 	loaded: function () {
 		var randomiseButton = document.getElementById('reset');
 			
-
 		randomiseButton.addEventListener('click', function (e) {
 			sight.resetButtonPressed();
             e.preventDefault();
@@ -50,18 +49,14 @@ var sight = {
 			currentCharacter = compareArrays[1],
 			percentageCorrect = compareArrays [2],
 			element = document.getElementById(currentCharacter);
-
-        if (correct === 'completeCorrect') {
-			element.setAttribute('class', 'correct');
-			this.displayResults(percentageCorrect);
-        } else if (correct === 'completeIncorrect') {
-        	element.setAttribute('class', 'incorrect');
-			this.displayResults(percentageCorrect);
-        } else if (correct === 'correct') {
-			element.setAttribute('class', 'correct');
-        } else if (correct === 'incorrect') {
-			element.setAttribute('class', 'incorrect');
-        };
+			update
+	         	= (correct === 'completeCorrect') ? (element.setAttribute('class', 'correct')
+	         										, this.displayResults(percentageCorrect))
+	   			: (correct === 'completeIncorrect') ? (element.setAttribute('class', 'incorrect')
+	   													, this.displayResults(percentageCorrect))
+				: (correct === 'correct') ? element.setAttribute('class', 'correct')
+				: (correct === 'incorrect') ? element.setAttribute('class', 'incorrect')
+				: 'error';
 	},
 
 	addEventListenerByClass: function () {
@@ -182,19 +177,14 @@ var sight = {
 				noteTailDown = false;
 			}
 
-			if (noteStrikeThrough && noteTailUp) {
-				noteType = '#noteStrikeThroughTailUp';
-			} else if (noteStrikeThrough && noteTailDown) {
-				noteType = '#noteStrikeThroughTailDown';
-			} else if (noteUnderscore && noteTailUp) {
-				noteType = '#noteUnderscoreTailUp';
-			} else if (noteUnderscore && noteTailDown) {
-				noteType = '#noteUnderscoreTailDown';
-			} else if (noteTailUp) {
-				noteType = '#noteTailUp';
-			} else if (noteTailDown) {
-				noteType = '#noteTailDown';
-			}
+			var noteType
+				= (noteStrikeThrough && noteTailUp) ? '#noteStrikeThroughTailUp'
+				: (noteStrikeThrough && noteTailDown) ? '#noteStrikeThroughTailDown'
+				: (noteUnderscore && noteTailUp) ? '#noteUnderscoreTailUp'
+				: (noteUnderscore && noteTailDown) ? '#noteUnderscoreTailDown'
+				: (noteTailUp) ? '#noteTailUp'
+				: (noteTailDown) ? '#noteTailDown'
+				: 'error';			
 
 			this.renderNotes(x, -y, noteType, i);
 		}
