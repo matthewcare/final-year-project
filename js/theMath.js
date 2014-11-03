@@ -16,7 +16,7 @@ var theMath = {
     octave: function (frequency) {
         var note = this.noteFromFrequency(frequency),
             noteNumber = Math.floor((note - 12)/12);
-        return octave;
+        return noteNumber;
     },
 
     noteFromValue: function (value) {
