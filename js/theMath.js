@@ -13,6 +13,28 @@ var theMath = {
         return note;
     },
 
+    octave: function (frequency) {
+        var note = this.noteFromFrequency(frequency),
+            noteNumber = Math.floor((note - 12)/12);
+        return octave;
+    },
+
+    noteFromValue: function (value) {
+        var arrayLength = value.length;
+            pitch = null,
+            note = value.split('')[0],
+            octave = value.split('')[arrayLength],
+            noteValue = this.NOTES.indexOf(note),
+            octaveValue = (octave * 12) + 12;
+
+        if (arrayLength === 3) {
+                var pitch = value.split('')[2];
+                noteValue = this.NOTES.indexOf(note + pitch);
+        }
+
+        return (noteValue + octaveValue);
+    },
+
     // Returns the note string based on the note number
     noteString: function (frequency) {
         var note = this.noteFromFrequency(frequency),

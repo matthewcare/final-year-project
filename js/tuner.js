@@ -3,10 +3,11 @@ var tuner = {
     // Updates the tuner display with the modal value of user input
     updateTunerDisplay: function (frequency) {
         var note =  theMath.noteString(frequency),
-            cent = theMath.centsFromFrequency(frequency);
+            cent = theMath.centsFromFrequency(frequency),
+            octave = theMath.octave(frequency);
 
         document.getElementById('wholeSamplePitch').innerHTML = Math.floor(frequency);
-        document.getElementById('wholeSampleNote').innerHTML = note;
+        document.getElementById('wholeSampleNote').innerHTML = note + octave;
 
         if (cent === 0) {
             document.getElementById('wholeSampleCent').className = "";
