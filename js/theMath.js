@@ -13,12 +13,14 @@ var theMath = {
         return note;
     },
 
+    // Returns the octave
     octave: function (frequency) {
         var note = this.noteFromFrequency(frequency),
-            noteNumber = Math.floor((note - 12)/12);
-        return noteNumber;
+            octave = Math.floor((note - 12)/12);
+        return octave;
     },
 
+    // Returns the 'noteFromFrequency' using a noteString such as A4 or A#4
     noteFromValue: function (value) {
         var arrayLength = value.length;
             pitch = null,
